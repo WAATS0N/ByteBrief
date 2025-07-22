@@ -1,0 +1,77 @@
+news_sources:
+  bbc:
+    name: "BBC News"
+    base_url: "https://www.bbc.com/news"
+    rss_feed: "https://feeds.bbci.co.uk/news/rss.xml"
+    selectors:
+      headline: "h1, h2.gs-c-promo-heading__title"
+      content: "div[data-component='text-block'] p"
+      author: ".qa-contributor-name"
+      date: "time"
+      link: "a.gs-c-promo-heading"
+    rate_limit: 2  # seconds between requests
+    
+  cnn:
+    name: "CNN"
+    base_url: "https://www.cnn.com"
+    rss_feed: "https://rss.cnn.com/rss/edition.rss"
+    selectors:
+      headline: "h1.headline__text, h3.cd__headline-text"
+      content: "div.l-container p"
+      author: ".byline__name"
+      date: ".timestamp"
+      link: "a.container__link"
+    rate_limit: 2
+    
+  reuters:
+    name: "Reuters"
+    base_url: "https://www.reuters.com"
+    rss_feed: "https://www.reuters.com/rssFeed/topNews"
+    selectors:
+      headline: "h1[data-testid='Heading'], h3[data-testid='Heading']"
+      content: "div[data-testid='paragraph'] p"
+      author: "[data-testid='AuthorName']"
+      date: "time"
+      link: "a[data-testid='Heading']"
+    rate_limit: 1
+    
+  techcrunch:
+    name: "TechCrunch"
+    base_url: "https://techcrunch.com"
+    rss_feed: "https://techcrunch.com/feed/"
+    selectors:
+      headline: "h1.article__title, h2.post-block__title"
+      content: "div.article-content p"
+      author: ".article__byline a"
+      date: ".article__byline time"
+      link: "a.post-block__title__link"
+    rate_limit: 2
+    
+  guardian:
+    name: "The Guardian"
+    base_url: "https://www.theguardian.com/international"
+    rss_feed: "https://www.theguardian.com/international/rss"
+    selectors:
+      headline: "h1, h3.fc-item__title"
+      content: "div.content__article-body p"
+      author: ".byline a"
+      date: "time"
+      link: "a.fc-item__link"
+    rate_limit: 1
+
+scraper_config:
+  default_rate_limit: 2
+  timeout: 10
+  retries: 3
+  user_agent: "ByteBrief/1.0 (+https://github.com/WAATS0N/ByteBrief)"
+  max_articles_per_source: 10
+  output_format: "json"  # json, csv, database
+  
+categories:
+  - "technology"
+  - "business"
+  - "politics"
+  - "world"
+  - "sports"
+  - "health"
+  - "science"

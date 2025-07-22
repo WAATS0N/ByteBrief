@@ -1,0 +1,95 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bytebrief"
+version = "0.1.0"
+description = "Smart News Digest for Busy Humans - News Scraping and Analysis Platform"
+authors = [
+    {name = "WAATS0N", email = "your.email@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["news", "scraping", "digest", "automation"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+    # Core scraping libraries
+    "requests>=2.31.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=5.1.0",
+    "html5lib>=1.1",
+    
+    # HTTP session management
+    "requests-html>=0.10.0",
+    
+    # Data handling
+    "pandas>=2.0.0",
+    "python-dateutil>=2.8.0",
+    
+    # Configuration and utilities
+    "python-dotenv>=1.0.0",
+    "pyyaml>=6.0.0",
+    
+    # Logging
+    "loguru>=0.7.0",
+    
+    # Time utilities
+    "schedule>=1.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-mock>=3.12.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.8.0",
+]
+
+test = [
+    "pytest>=8.0.0",
+    "pytest-mock>=3.12.0",
+    "pytest-cov>=4.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/WAATS0N/ByteBrief"
+Repository = "https://github.com/WAATS0N/ByteBrief"
+Issues = "https://github.com/WAATS0N/ByteBrief/issues"
+
+[project.scripts]
+bytebrief = "src.scraper.main:main"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true

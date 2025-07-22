@@ -1,0 +1,73 @@
+2025-07-22 18:57:40 | INFO     | __main__:main - 🗞️ ByteBrief News Scraper Starting
+2025-07-22 18:57:40 | INFO     | __main__:main - 📅 Current time: 2025-07-22 18:57:40.061277
+2025-07-22 18:57:40 | INFO     | __main__:test_bbc_scraper - 🚀 Starting ByteBrief BBC News Scraper Test
+2025-07-22 18:57:40 | INFO     | __main__:test_bbc_scraper - ✅ BBC Scraper initialized successfully
+2025-07-22 18:57:40 | INFO     | __main__:test_bbc_scraper - 📰 Starting to scrape BBC News...
+2025-07-22 18:57:40 | INFO     | src.scraper.base_scraper:_get_page - Fetching: https://feeds.bbci.co.uk/news/rss.xml
+2025-07-22 18:57:40 | INFO     | src.scraper.base_scraper:_get_page - Fetching: 
+2025-07-22 18:57:40 | WARNING  | src.scraper.base_scraper:_get_page - Request failed for : Invalid URL '': No scheme supplied. Perhaps you meant https://?
+2025-07-22 18:57:40 | INFO     | src.scraper.base_scraper:_get_page - Retrying in 2 seconds...
+2025-07-22 18:57:42 | INFO     | src.scraper.base_scraper:_get_page - Fetching: 
+2025-07-22 18:57:42 | WARNING  | src.scraper.base_scraper:_get_page - Request failed for : Invalid URL '': No scheme supplied. Perhaps you meant https://?
+2025-07-22 18:57:42 | INFO     | src.scraper.base_scraper:_get_page - Retrying in 4 seconds...
+2025-07-22 18:57:46 | INFO     | src.scraper.base_scraper:_get_page - Fetching: 
+2025-07-22 18:57:46 | WARNING  | src.scraper.base_scraper:_get_page - Request failed for : Invalid URL '': No scheme supplied. Perhaps you meant https://?
+2025-07-22 18:57:46 | INFO     | src.scraper.base_scraper:_get_page - Retrying in 6 seconds...
+2025-07-22 18:57:52 | INFO     | src.scraper.base_scraper:_get_page - Fetching: 
+2025-07-22 18:57:52 | WARNING  | src.scraper.base_scraper:_get_page - Request failed for : Invalid URL '': No scheme supplied. Perhaps you meant https://?
+2025-07-22 18:57:52 | ERROR    | src.scraper.base_scraper:_get_page - Max retries exceeded for 
+2025-07-22 18:57:52 | INFO     | src.scraper.base_scraper:_get_page - Fetching: 
+2025-07-22 18:57:52 | WARNING  | src.scraper.base_scraper:_get_page - Request failed for : Invalid URL '': No scheme supplied. Perhaps you meant https://?
+2025-07-22 18:57:52 | INFO     | src.scraper.base_scraper:_get_page - Retrying in 2 seconds...
+2025-07-22 18:57:54 | INFO     | src.scraper.base_scraper:_get_page - Fetching: 
+2025-07-22 18:57:54 | WARNING  | src.scraper.base_scraper:_get_page - Request failed for : Invalid URL '': No scheme supplied. Perhaps you meant https://?
+2025-07-22 18:57:54 | INFO     | src.scraper.base_scraper:_get_page - Retrying in 4 seconds...
+2025-07-22 18:57:58 | INFO     | src.scraper.base_scraper:_get_page - Fetching: 
+2025-07-22 18:57:58 | WARNING  | src.scraper.base_scraper:_get_page - Request failed for : Invalid URL '': No scheme supplied. Perhaps you meant https://?
+2025-07-22 18:57:58 | INFO     | src.scraper.base_scraper:_get_page - Retrying in 6 seconds...
+2025-07-22 18:58:04 | INFO     | src.scraper.base_scraper:_get_page - Fetching: 
+2025-07-22 18:58:04 | WARNING  | src.scraper.base_scraper:_get_page - Request failed for : Invalid URL '': No scheme supplied. Perhaps you meant https://?
+2025-07-22 18:58:04 | ERROR    | src.scraper.base_scraper:_get_page - Max retries exceeded for 
+2025-07-22 18:58:04 | INFO     | src.scraper.base_scraper:_get_page - Fetching: 
+2025-07-22 18:58:04 | WARNING  | src.scraper.base_scraper:_get_page - Request failed for : Invalid URL '': No scheme supplied. Perhaps you meant https://?
+2025-07-22 18:58:04 | INFO     | src.scraper.base_scraper:_get_page - Retrying in 2 seconds...
+2025-07-22 18:58:06 | INFO     | src.scraper.base_scraper:_get_page - Fetching: 
+2025-07-22 18:58:06 | WARNING  | src.scraper.base_scraper:_get_page - Request failed for : Invalid URL '': No scheme supplied. Perhaps you meant https://?
+2025-07-22 18:58:06 | INFO     | src.scraper.base_scraper:_get_page - Retrying in 4 seconds...
+2025-07-22 18:58:10 | INFO     | src.scraper.base_scraper:_get_page - Fetching: 
+2025-07-22 18:58:10 | WARNING  | src.scraper.base_scraper:_get_page - Request failed for : Invalid URL '': No scheme supplied. Perhaps you meant https://?
+2025-07-22 18:58:10 | INFO     | src.scraper.base_scraper:_get_page - Retrying in 6 seconds...
+2025-07-22 18:58:15 | WARNING  | __main__:main - ⚠️ Scraping interrupted by user
+2025-07-22 18:58:15 | INFO     | __main__:main - 👋 ByteBrief News Scraper finished
+2025-07-22 19:01:27 | INFO     | __main__:main - 🗞️ ByteBrief News Scraper Starting
+2025-07-22 19:01:27 | INFO     | __main__:main - 📅 Current time: 2025-07-22 19:01:27.797178
+2025-07-22 19:01:27 | INFO     | __main__:test_bbc_scraper - 🚀 Starting ByteBrief BBC News Scraper Test
+2025-07-22 19:01:27 | INFO     | __main__:test_bbc_scraper - ✅ BBC Scraper initialized successfully
+2025-07-22 19:01:27 | INFO     | __main__:test_bbc_scraper - 📰 Starting to scrape BBC News...
+2025-07-22 19:01:28 | INFO     | src.scraper.sources.bbc_scraper:scrape_source - Found 5 items in RSS feed
+2025-07-22 19:01:28 | INFO     | src.scraper.sources.bbc_scraper:scrape_source - Processing article: Union boss McCluskey took private jet flights arra...
+2025-07-22 19:01:28 | INFO     | src.scraper.sources.bbc_scraper:scrape_source - ✅ Successfully scraped: Union boss McCluskey took priv...
+2025-07-22 19:01:28 | DEBUG    | src.scraper.base_scraper:_rate_limit - Rate limiting: waiting 2.77 seconds
+2025-07-22 19:01:31 | INFO     | src.scraper.sources.bbc_scraper:scrape_source - Processing article: Man who murdered wife as she pushed their baby in ...
+2025-07-22 19:01:31 | INFO     | src.scraper.sources.bbc_scraper:scrape_source - ✅ Successfully scraped: Man who murdered wife as she p...
+2025-07-22 19:01:31 | DEBUG    | src.scraper.base_scraper:_rate_limit - Rate limiting: waiting 2.92 seconds
+2025-07-22 19:01:33 | INFO     | src.scraper.sources.bbc_scraper:scrape_source - Processing article: Cleverly returns to Tory front bench as Badenoch r...
+2025-07-22 19:01:33 | INFO     | src.scraper.sources.bbc_scraper:scrape_source - ✅ Successfully scraped: Cleverly returns to Tory front...
+2025-07-22 19:01:33 | DEBUG    | src.scraper.base_scraper:_rate_limit - Rate limiting: waiting 2.50 seconds
+2025-07-22 19:01:36 | INFO     | src.scraper.sources.bbc_scraper:scrape_source - Processing article: Food bills on course to rise by £275 a year as pri...
+2025-07-22 19:01:36 | INFO     | src.scraper.sources.bbc_scraper:scrape_source - ✅ Successfully scraped: Food bills on course to rise b...
+2025-07-22 19:01:36 | DEBUG    | src.scraper.base_scraper:_rate_limit - Rate limiting: waiting 2.54 seconds
+2025-07-22 19:01:38 | INFO     | src.scraper.sources.bbc_scraper:scrape_source - Processing article: Elvis experience costing up to £300 branded 'atroc...
+2025-07-22 19:01:38 | INFO     | src.scraper.sources.bbc_scraper:scrape_source - ✅ Successfully scraped: Elvis experience costing up to...
+2025-07-22 19:01:38 | DEBUG    | src.scraper.base_scraper:_rate_limit - Rate limiting: waiting 2.24 seconds
+2025-07-22 19:01:41 | SUCCESS  | __main__:test_bbc_scraper - ✅ Successfully scraped 5 articles from BBC
+2025-07-22 19:01:41 | INFO     | __main__:test_bbc_scraper - 📄 Sample Article:
+2025-07-22 19:01:41 | INFO     | __main__:test_bbc_scraper -   Title: Union boss McCluskey took private jet flights arranged by building firm, report finds
+2025-07-22 19:01:41 | INFO     | __main__:test_bbc_scraper -   URL: https://www.bbc.com/news/articles/cp3kgg55410o
+2025-07-22 19:01:41 | INFO     | __main__:test_bbc_scraper -   Author: None
+2025-07-22 19:01:41 | INFO     | __main__:test_bbc_scraper -   Source: BBC News
+2025-07-22 19:01:41 | INFO     | __main__:test_bbc_scraper -   Scraped: 2025-07-22 19:01:28.239473
+2025-07-22 19:01:41 | INFO     | src.scraper.base_scraper:save_articles - Saved 5 articles to output\bbc_test_articles.json
+2025-07-22 19:01:41 | SUCCESS  | __main__:test_bbc_scraper - 💾 Articles saved to: output\bbc_test_articles.json
+2025-07-22 19:01:41 | SUCCESS  | __main__:main - ✅ Scraping completed successfully!
+2025-07-22 19:01:41 | INFO     | __main__:main - 👋 ByteBrief News Scraper finished
