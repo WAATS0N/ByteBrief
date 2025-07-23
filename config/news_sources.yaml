@@ -14,7 +14,7 @@ news_sources:
   cnn:
     name: "CNN"
     base_url: "https://www.cnn.com"
-    rss_feed: "https://rss.cnn.com/rss/edition.rss"
+    rss_feed: "http://rss.cnn.com/rss/edition.rss"
     selectors:
       headline: "h1.headline__text, h3.cd__headline-text"
       content: "div.l-container p"

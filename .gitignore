@@ -84,8 +84,10 @@ dmypy.json
 logs/
 output/
 *.log
-*.json
-test_*.py
+# Ignore scraped output JSON files
+*_articles.json
+*_news_*.json
+combined_*.json
 
 # IDE
 .vscode/

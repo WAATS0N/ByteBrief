@@ -30,13 +30,21 @@ class Article:
     
     def to_dict(self) -> dict:
         """Convert article to dictionary for JSON serialization"""
+        # Handle published_date - it could be datetime object or string
+        pub_date = None
+        if self.published_date:
+            if hasattr(self.published_date, 'isoformat'):
+                pub_date = self.published_date.isoformat()
+            else:
+                pub_date = str(self.published_date)
+        
         return {
             'title': self.title,
             'content': self.content,
             'url': self.url,
             'source': self.source,
             'author': self.author,
-            'published_date': self.published_date.isoformat() if self.published_date else None,
+            'published_date': pub_date,
             'scraped_date': self.scraped_date.isoformat(),
             'category': self.category,
             'tags': self.tags
