@@ -40,6 +40,7 @@ dependencies = [
     "loguru>=0.7.0",
     # Time utilities
     "schedule>=1.2.0",
+    "django>=5.0.0",
 ]
 
 [project.optional-dependencies]
@@ -65,7 +66,7 @@ Repository = "https://github.com/WAATS0N/ByteBrief"
 Issues = "https://github.com/WAATS0N/ByteBrief/issues"
 
 [project.scripts]
-bytebrief = "src.scraper.main:main"
+bytebrief = "bytebrief.main:main"
 
 [tool.black]
 line-length = 88

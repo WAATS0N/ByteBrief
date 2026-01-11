@@ -6,13 +6,14 @@ import sys
 from pathlib import Path
 from loguru import logger
 from datetime import datetime
+import yaml
 
 # Add project root to path for imports
-project_root = Path(__file__).parent
-sys.path.append(str(project_root))
+project_root = Path(__file__).parent.parent
+sys.path.append(str(project_root / "src"))
 
-from src.scraper.sources.cnn_scraper import CNNScraper
-from src.scraper.sources.bbc_scraper import BBCScraper
+from bytebrief.scrapers.cnn import CNNScraper
+from bytebrief.scrapers.bbc import BBCScraper
 
 
 def setup_logging():
@@ -28,19 +29,31 @@ def setup_logging():
         colorize=True
     )
 
+def load_config():
+    """Load configuration for testing"""
+    config = {}
+    try:
+        with open("config/settings.yaml", 'r') as f:
+            config.update(yaml.safe_load(f))
+        with open("config/sources.yaml", 'r') as f:
+            config.update(yaml.safe_load(f))
+    except Exception as e:
+        logger.error(f"Failed to load config: {e}")
+    return config
 
 def test_cnn_scraper():
     """Test the CNN scraper functionality"""
     logger.info("🚀 Starting ByteBrief CNN News Scraper Test")
     
     try:
+        config = load_config()
         # Initialize CNN scraper
-        scraper = CNNScraper()
+        scraper = CNNScraper(config)
         logger.info("✅ CNN Scraper initialized successfully")
         
         # Test scraping CNN news
         logger.info("📰 Starting to scrape CNN News...")
-        articles = scraper.scrape_source('cnn')
+        articles = scraper.scrape()
         
         if articles:
             logger.success(f"✅ Successfully scraped {len(articles)} articles from CNN")
@@ -55,10 +68,6 @@ def test_cnn_scraper():
                 logger.info(f"  Content Preview: {article.content[:100]}...")
                 logger.info("")
             
-            # Save articles to file
-            output_file = scraper.save_articles(articles, "cnn_test_articles.json")
-            logger.success(f"💾 CNN Articles saved to: {output_file}")
-            
         else:
             logger.warning("⚠️ No articles were scraped from CNN")
             
@@ -72,18 +81,19 @@ def compare_scrapers():
     logger.info("🔄 Comparing CNN and BBC scrapers...")
     
     try:
+        config = load_config()
         # Test both scrapers
-        cnn_scraper = CNNScraper()
-        bbc_scraper = BBCScraper()
+        cnn_scraper = CNNScraper(config)
+        bbc_scraper = BBCScraper(config)
         
         logger.info("📊 Scraping both sources for comparison...")
         
         # Scrape CNN
-        cnn_articles = cnn_scraper.scrape_source('cnn')
+        cnn_articles = cnn_scraper.scrape()
         logger.info(f"CNN: {len(cnn_articles)} articles")
         
         # Scrape BBC  
-        bbc_articles = bbc_scraper.scrape_source('bbc')
+        bbc_articles = bbc_scraper.scrape()
         logger.info(f"BBC: {len(bbc_articles)} articles")
         
         # Comparison summary
@@ -91,12 +101,6 @@ def compare_scrapers():
         logger.info(f"  🇺🇸 CNN Articles: {len(cnn_articles)}")
         logger.info(f"  🇬🇧 BBC Articles: {len(bbc_articles)}")
         logger.info(f"  📊 Total Articles: {len(cnn_articles) + len(bbc_articles)}")
-        
-        # Save combined results
-        all_articles = cnn_articles + bbc_articles
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_file = cnn_scraper.save_articles(all_articles, f"combined_news_{timestamp}.json")
-        logger.success(f"💾 Combined articles saved to: {output_file}")
         
     except Exception as e:
         logger.error(f"❌ Error during comparison: {e}")
