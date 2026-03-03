@@ -1,0 +1,113 @@
+# ============================================================
+# ByteBrief — .gitignore
+# Python (FastAPI/Celery) + Next.js
+# ============================================================
+
+# ----------------------------
+# Python
+# ----------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# uv
+uv.lock
+.uv/
+
+# Type checking / linting
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+
+# Testing
+.pytest_cache/
+.tox/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# ----------------------------
+# Environment & Secrets
+# ----------------------------
+.env
+.env.*
+!.env.example
+
+# ----------------------------
+# FastAPI / Backend
+# ----------------------------
+backend/data/
+*.db
+*.sqlite3
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Logs
+*.log
+logs/
+
+# ----------------------------
+# Next.js / Frontend
+# ----------------------------
+frontend/.next/
+frontend/out/
+frontend/node_modules/
+frontend/.turbo/
+frontend/dist/
+
+# Next.js build cache
+frontend/.vercel
+
+# ----------------------------
+# Node / npm / pnpm / yarn
+# ----------------------------
+node_modules/
+.npm
+.pnp
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ----------------------------
+# OS & Editor
+# ----------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# ----------------------------
+# Misc
+# ----------------------------
+*.bak
+*.tmp
+*.swp
+*.orig
