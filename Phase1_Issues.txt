@@ -1,0 +1,124 @@
+BYTEBRIEF — PHASE 1 AUDIT REPORT (UPDATED)
+============================================
+Date: 2026-03-02
+Status: Re-checked after fixes applied
+
+Phase 1 Scope (Blueprint §13):
+  - MongoDB setup & indexes
+  - Scrapy spiders for 3 sources
+  - Celery with MongoDB broker
+  - Playwright scraper
+  - feedparser RSS
+
+
+CRITICAL ISSUES
+===============
+
+1. NO __init__.py FILES ANYWHERE
+   STATUS: ✅ RESOLVED
+   All 9 package directories now have __init__.py files.
+
+2. setup_indexes.py IN WRONG LOCATION (double "app" folder)
+   STATUS: ✅ RESOLVED
+   Moved to correct path: backend/app/db/setup_indexes.py
+   Old path backend/app/app/db/setup_indexes.py has been removed.
+
+3. MISSING nlp_tasks.py
+   STATUS: ✅ RESOLVED
+   File created at backend/app/tasks/nlp_tasks.py with
+   post_process_article stub task (Phase 2 will add real logic).
+
+4. MISSING main.py (FastAPI entry point)
+   STATUS: ⚠️ PARTIALLY RESOLVED — NEW BUG INTRODUCED
+   File created at backend/app/main.py.
+   However, main.py imports from "app.api" (news, search, users, events)
+   but NO backend/app/api/ directory or files exist.
+   Impact: "uvicorn app.main:app" will crash with ImportError.
+
+5. NO VIRTUAL ENVIRONMENT / DEPENDENCIES NOT INSTALLED
+   STATUS: ❌ STILL OPEN
+   No venv directory found. requirements.txt exists but nothing is installed.
+
+
+SIGNIFICANT ISSUES
+==================
+
+6. ONLY 1 OF 3 SCRAPY SPIDERS BUILT
+   STATUS: ✅ RESOLVED
+   Three spiders now exist:
+     - bbc_spider.py (BBCSpider)
+     - reuters_spider.py (ReutersSpider)
+     - ap_news_spider.py (APNewsSpider)
+
+7. BBC SPIDER USES async def parse_article
+   STATUS: ✅ RESOLVED
+   Changed to sync "def parse_article" with async_to_sync wrapper
+   for Motor calls. Same pattern applied to Reuters and AP News spiders.
+
+8. NO post_process_article CELERY TASK TRIGGERED AFTER SCRAPING
+   STATUS: ✅ RESOLVED
+   All three spiders, playwright_scraper.py, and rss_fetcher.py now
+   call post_process_article.delay(article_id) after saving.
+
+9. NO TASK RETRY LOGIC ON ANY CELERY TASK
+   STATUS: ✅ RESOLVED
+   scrape_tasks.py now uses bind=True, max_retries=3, and
+   self.retry(exc=exc, countdown=60) on all three scraper tasks.
+
+10. PLAYWRIGHT SCRAPER IS BARE-BONES
+    STATUS: ⚠️ PARTIALLY RESOLVED — NEW BUG INTRODUCED
+    Now has full article extraction, MongoDB save, and post_process trigger.
+    BUG on line 30:
+      "content_clean": " ".join(await page.inner_text('body').split('\n'))
+    Python evaluates page.inner_text('body').split('\n') BEFORE await,
+    calling .split() on the coroutine object, which will crash.
+    Fix needed: (await page.inner_text('body')).split('\n')
+
+11. RSS FETCHER MISSING REQUIRED FIELDS
+    STATUS: ✅ RESOLVED
+    Now includes content_raw, author, images, and configurable category.
+
+
+MINOR ISSUES
+============
+
+12. PYTHON VERSION MISMATCH (3.13 vs Blueprint's 3.11)
+    STATUS: ❌ STILL OPEN
+    System still has Python 3.13.5. Not a code fix — environment decision.
+
+13. publish_date HARDCODED IN BBC SPIDER
+    STATUS: ✅ RESOLVED
+    BBC spider now parses <time datetime="..."> attribute from the page.
+    Note: Reuters and AP News spiders still use datetime.now() as fallback.
+
+14. BBC SPIDER MISSING ARTICLE FIELDS (author, images)
+    STATUS: ✅ RESOLVED
+    All three spiders now include author, images, sentiment_score,
+    and sentiment_label fields.
+
+
+NEW ISSUES FOUND IN THIS REVIEW
+================================
+
+15. main.py IMPORTS NON-EXISTENT app.api MODULE
+    File: backend/app/main.py lines 2, 12-13
+    Imports: app.api.news, app.api.search, app.api.users, app.api.events
+    No backend/app/api/ directory exists. No api/*.py files exist.
+    Impact: FastAPI server will crash on startup with ImportError.
+
+16. playwright_scraper.py AWAIT PRECEDENCE BUG
+    File: backend/app/scraper/playwright_scraper.py line 30
+    Current:  await page.inner_text('body').split('\n')
+    Should be: (await page.inner_text('body')).split('\n')
+    Impact: Will raise AttributeError at runtime (coroutine has no .split).
+
+
+SCORECARD
+=========
+                        Original    After Fixes
+  Resolved:                0            10
+  Partially resolved:      0             2  (issues #4, #10 — new bugs)
+  Still open:              0             2  (issues #5, #12)
+  New issues:              -             2  (issues #15, #16)
+                         ----          ----
+  Total remaining:        14             6
