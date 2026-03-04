@@ -19,8 +19,9 @@ const Navigation = ({ currentTime, isMenuOpen, setIsMenuOpen }) => (
 
         <div className="hidden md:flex items-center space-x-8">
           {[
-            { name: 'Home', path: '/' },
-            { name: 'Categories', path: '/categories' }
+            { name: 'Home', path: '/home' },
+            { name: 'Categories', path: '/categories' },
+            { name: 'Analytics', path: '/analytics' }
           ].map((item) => (
             <Link
               key={item.name}

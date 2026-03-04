@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Clock, ArrowRight, Share2, Bookmark } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const FeaturedNews = ({ featuredArticles }) => {
+  const [bookmarks, setBookmarks] = useState({});
+
+  const toggleBookmark = (id) => {
+    setBookmarks(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
   return (
     <div className="py-20 bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,7 +34,11 @@ const FeaturedNews = ({ featuredArticles }) => {
                       <span className={`text-xs font-bold ${importanceColor}`}>
                         {article.sentiment === 'positive' ? 'High Impact' : 'Trending'}
                       </span>
-                      <Bookmark className="h-4 w-4 text-gray-500 hover:text-white cursor-pointer transition-colors" />
+                      <button onClick={() => toggleBookmark(article.id)} className="focus:outline-none">
+                        <Bookmark
+                          className={`h-4 w-4 cursor-pointer transition-colors ${bookmarks[article.id] ? 'fill-current text-purple-400' : 'text-gray-500 hover:text-white'}`}
+                        />
+                      </button>
                     </div>
                   </div>
 
