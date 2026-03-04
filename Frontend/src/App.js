@@ -83,31 +83,34 @@ const ByteBriefWebsite = () => {
     };
     loadMetadata();
 
-    // Fetch news from API on mount
+    // Fetch news from all sources on mount
     const fetchNews = async () => {
       setIsLoading(true);
       try {
-        const defaultCategories = ['Technology', 'Business', 'Global', 'Health'];
-        const data = await generateDigest([], defaultCategories);
+        // No keywords or categories — fetch from all 10+ sources
+        const data = await generateDigest([], []);
 
         if (data.articles && data.articles.length > 0) {
-          const mappedFeatured = data.articles.slice(0, 4).map((article, idx) => ({
+          const mappedFeatured = data.articles.slice(0, 8).map((article, idx) => ({
             id: idx + 100,
             title: article.title,
             summary: article.summary || article.content?.slice(0, 150) + "..." || "No summary available.",
-            category: article.category || "General",
+            category: article.category || "Global",
             readTime: "3 min read",
             sentiment: article.sentiment || "neutral",
-            importance: 8.5
+            importance: 8.5,
+            url: article.url,
+            source: article.source,
+            image_url: article.image_url,
           }));
           setFeaturedNewsData(mappedFeatured);
 
           const mappedBreaking = data.articles.map((a, idx) => ({
             title: a.title,
-            id: idx + 200, // Distinct ID range
+            id: idx + 200,
             summary: a.summary || a.content,
             category: a.category || "Breaking",
-            source: a.source
+            source: a.source,
           }));
           setBreakingNewsData(mappedBreaking);
         }

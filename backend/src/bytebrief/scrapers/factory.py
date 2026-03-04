@@ -8,6 +8,11 @@ from .cnn import CNNScraper
 from .reuters import ReutersScraper
 from .techcrunch import TechCrunchScraper
 from .guardian import GuardianScraper
+from .aljazeera import AlJazeeraScraper
+from .apnews import APNewsScraper
+from .espn import ESPNScraper
+from .npr import NPRScraper
+from .arstechnica import ArsTechnicaScraper
 
 class ScraperFactory:
     """Factory class to create scrapers based on source name"""
@@ -17,7 +22,12 @@ class ScraperFactory:
         'cnn': CNNScraper,
         'reuters': ReutersScraper,
         'techcrunch': TechCrunchScraper,
-        'guardian': GuardianScraper
+        'guardian': GuardianScraper,
+        'aljazeera': AlJazeeraScraper,
+        'apnews': APNewsScraper,
+        'espn': ESPNScraper,
+        'npr': NPRScraper,
+        'arstechnica': ArsTechnicaScraper,
     }
     
     @classmethod

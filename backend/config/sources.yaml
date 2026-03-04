@@ -58,3 +58,33 @@ news_sources:
       date: "time"
       link: "a.fc-item__link"
     rate_limit: 1
+
+  aljazeera:
+    name: "Al Jazeera"
+    base_url: "https://www.aljazeera.com"
+    rss_feed: "https://www.aljazeera.com/xml/rss/all.xml"
+    rate_limit: 2
+
+  apnews:
+    name: "AP News"
+    base_url: "https://apnews.com"
+    rss_feed: "https://rsshub.app/apnews/topics/apf-topnews"
+    rate_limit: 2
+
+  espn:
+    name: "ESPN"
+    base_url: "https://www.espn.com"
+    rss_feed: "https://www.espn.com/espn/rss/news"
+    rate_limit: 2
+
+  npr:
+    name: "NPR"
+    base_url: "https://www.npr.org"
+    rss_feed: "https://feeds.npr.org/1001/rss.xml"
+    rate_limit: 2
+
+  arstechnica:
+    name: "Ars Technica"
+    base_url: "https://arstechnica.com"
+    rss_feed: "https://feeds.arstechnica.com/arstechnica/index"
+    rate_limit: 2

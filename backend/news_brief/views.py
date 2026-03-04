@@ -5,6 +5,7 @@ from .forms import NewsBriefForm
 import sys
 from pathlib import Path
 import json
+from collections import defaultdict
 
 # Add src to path
 sys.path.append(str(Path(__file__).resolve().parent.parent / "src"))
@@ -29,8 +30,8 @@ def get_metadata(request):
                 { "name": 'Gaming', "icon": "Gamepad2", "color": 'from-violet-500 to-purple-500', "count": 11 },
             ],
             "stats": [
-                { "label": 'News Sources', "value": '500+', "icon": "Globe" },
-                { "label": 'Articles Daily', "value": '10K+', "icon": "TrendingUp" },
+                { "label": 'News Sources', "value": '10+', "icon": "Globe" },
+                { "label": 'Articles Daily', "value": '100+', "icon": "TrendingUp" },
                 { "label": 'AI Accuracy', "value": '97%', "icon": "Bot" },
                 { "label": 'Read Time Saved', "value": '85%', "icon": "Clock" }
             ],
@@ -56,15 +57,10 @@ def generate_digest_api(request):
             keywords = data.get('keywords', [])
             categories = data.get('categories', [])
             sources = data.get('sources', [])
-            
-            # Combine categories into keywords for better search
-            search_keywords = list(keywords)
-            if categories:
-                search_keywords.extend(categories)
-            
+
             client_config = ClientConfig(
                 name="Guest",
-                keywords=search_keywords,
+                keywords=keywords,
                 preferred_sources=sources,
                 output_format='json',
                 categories=categories
@@ -75,13 +71,30 @@ def generate_digest_api(request):
             
             try:
                 articles = json.loads(results_json)
-            except:
+            except Exception:
                 articles = []
-                
-            return JsonResponse({'status': 'success', 'articles': articles})
+
+            # If a specific category filter was requested, apply it
+            if categories:
+                cat_lower = [c.lower() for c in categories]
+                articles = [
+                    a for a in articles
+                    if (a.get('category') or '').lower() in cat_lower
+                    or any(kw.lower() in (a.get('title','') + ' ' + a.get('content','')).lower() for kw in categories)
+                ]
+
+            # Group articles by category for the frontend
+            by_category = defaultdict(list)
+            for article in articles:
+                cat = article.get('category') or 'Global'
+                by_category[cat].append(article)
+
+            return JsonResponse({
+                'status': 'success',
+                'articles': articles,
+                'by_category': dict(by_category),
+            })
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     
     return JsonResponse({'status': 'error', 'message': 'Only POST method allowed'}, status=405)
-
-

@@ -41,64 +41,58 @@ class AgentOrchestrator:
         logger.info(f"Starting agent run for client: {client_config.name}")
         
         all_articles = []
-        
+        full_config = {**self.settings, **self.sources_config}
+
         # Strategy:
-        # 1. If keywords are present, use Google Search Scraper for targeted results
-        # 2. If no keywords, scrape RSS feeds from preferred sources
-        
-        sources_to_scrape = client_config.preferred_sources or self.sources_config.get('news_sources', {}).keys()
-        
-        # Get domains for Google Search if needed
-        domains = []
-        for source in sources_to_scrape:
-            source_cfg = self.sources_config.get('news_sources', {}).get(source.lower())
-            if source_cfg and 'base_url' in source_cfg:
-                # Extract domain from base_url (e.g., "https://www.bbc.com/news" -> "bbc.com")
-                from urllib.parse import urlparse
-                domain = urlparse(source_cfg['base_url']).netloc.replace('www.', '')
-                domains.append(domain)
-        
-        if client_config.keywords:
-            # Use Google Search Scraper
-            logger.info(f"Keywords detected: {client_config.keywords}. Using Google Search Scraper.")
-            search_scraper = GoogleSearchScraper({**self.settings, **self.sources_config})
-            
-            for keyword in client_config.keywords:
+        # 1. Always scrape ALL configured RSS sources first for broad coverage
+        # 2. If specific keywords are present, also run Google Search for targeted results
+
+        all_source_names = list(self.sources_config.get('news_sources', {}).keys())
+
+        logger.info(f"Scraping {len(all_source_names)} news sources: {all_source_names}")
+        for source_name in all_source_names:
+            scraper = ScraperFactory.create_scraper(source_name, full_config)
+            if scraper:
                 try:
-                    logger.info(f"Searching for '{keyword}' across {len(domains)} domains")
-                    articles = search_scraper.scrape(keyword, domains)
+                    logger.info(f"Scraping {source_name}...")
+                    articles = scraper.scrape()
+                    logger.info(f"  Got {len(articles)} articles from {source_name}")
                     all_articles.extend(articles)
                 except Exception as e:
-                    logger.error(f"Search failed for keyword '{keyword}': {e}")
-        else:
-            # Fallback to standard RSS scraping
-            logger.info("No keywords detected. Scraping RSS feeds.")
-            for source_name in sources_to_scrape:
-                source_name = source_name.lower()
-                if source_name not in self.sources_config.get('news_sources', {}):
-                    logger.warning(f"Source {source_name} not configured, skipping.")
-                    continue
-                    
-                logger.info(f"Dispatching scraper for {source_name}")
-                
-                # Create scraper with merged config
-                full_config = {**self.settings, **self.sources_config}
-                scraper = ScraperFactory.create_scraper(source_name, full_config)
-                
-                if scraper:
-                    try:
-                        articles = scraper.scrape()
-                        all_articles.extend(articles)
-                    except Exception as e:
-                        logger.error(f"Scraper {source_name} failed: {e}")
-                else:
-                    logger.warning(f"No scraper implementation found for {source_name}")
-        
+                    logger.error(f"Scraper {source_name} failed: {e}")
+            else:
+                logger.warning(f"No scraper found for {source_name}, skipping.")
+
+        # If keywords also provided, supplement with Google Search
+        if client_config.keywords:
+            logger.info(f"Supplementing with Google Search for keywords: {client_config.keywords}")
+            domains = []
+            for source_name in all_source_names:
+                source_cfg = self.sources_config.get('news_sources', {}).get(source_name)
+                if source_cfg and 'base_url' in source_cfg:
+                    from urllib.parse import urlparse
+                    domain = urlparse(source_cfg['base_url']).netloc.replace('www.', '')
+                    domains.append(domain)
+
+            search_scraper = GoogleSearchScraper(full_config)
+            for keyword in client_config.keywords:
+                try:
+                    results = search_scraper.scrape(keyword, domains)
+                    all_articles.extend(results)
+                except Exception as e:
+                    logger.error(f"Google Search failed for '{keyword}': {e}")
+
+        # If category filter is set, filter only articles that match a category
+        if client_config.categories:
+            category_lower = [c.lower() for c in client_config.categories]
+            # We'll still return all articles but processor will filter further if keywords set
+
         # Deduplicate results
         logger.info(f"Collected {len(all_articles)} raw articles. Deduplicating...")
         unique_articles = self.comparer.deduplicate(all_articles)
-        
-        # Process results (filtering is less needed if we used search, but good for safety)
+        logger.info(f"After deduplication: {len(unique_articles)} articles")
+
+        # Process: auto-categorize + filter + format
         processor = DataProcessor(client_config)
         result = processor.process(unique_articles)
         
