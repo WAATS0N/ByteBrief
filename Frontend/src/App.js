@@ -10,6 +10,7 @@ import { useRealTime } from './hooks/useRealTime';
 import { generateDigest, fetchMetadata } from './services/api';
 import CategoryPage from './pages/CategoryPage';
 import ArticleDigestPage from './pages/ArticleDigestPage';
+import Categories from './pages/Categories';
 
 const Home = ({ breakingNewsData, heroData, categoriesData, featuredNewsData, statsData, isLoading, animatedText, newsIndex }) => (
   <>
@@ -127,6 +128,7 @@ const ByteBriefWebsite = () => {
             />
           } />
           <Route path="/category/:categoryName" element={<CategoryPage />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/article/:id" element={<ArticleDigestPage />} />
         </Routes>
       </Layout>

@@ -60,9 +60,10 @@ Follow these steps to set up the project locally.
 
 4.  Start the Development Server:
     ```bash
-    uv run python manage.py runserver
+        uv run python manage.py migrate
+
     ```
-    The backend API will be available at `http://localhost:8000`.
+    The backend API will be available at `http://locacdlhost:8000`.
 
 ### Frontend Setup
 

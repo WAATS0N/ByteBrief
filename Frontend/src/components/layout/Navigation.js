@@ -20,7 +20,7 @@ const Navigation = ({ currentTime, isMenuOpen, setIsMenuOpen }) => (
         <div className="hidden md:flex items-center space-x-8">
           {[
             { name: 'Home', path: '/' },
-            { name: 'Categories', path: '/' } // Redirect to home for now as categories are on home
+            { name: 'Categories', path: '/categories' }
           ].map((item) => (
             <Link
               key={item.name}
