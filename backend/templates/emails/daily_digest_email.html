@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-w-md;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #111;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+
+        h2 {
+            color: #fff;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(to right, #9333ea, #06b6d4);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .news-item {
+            background-color: #222;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #9333ea;
+        }
+
+        .news-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Today's Top Stories 🗞️</h2>
+        <p>Hello,</p>
+        <p>Here is your daily personalized news digest from ByteBrief:</p>
+
+        {% for article in news_list %}
+        <div class="news-item">
+            <div class="news-title">{{ article.title }}</div>
+            <div style="font-size: 0.9em; color: #ccc;">{{ article.summary }}</div>
+        </div>
+        {% empty %}
+        <div class="news-item">
+            <div class="news-title">No major stories today.</div>
+        </div>
+        {% endfor %}
+
+        <p><a href="{{ frontend_url }}" class="btn">Read Full Stories on ByteBrief</a></p>
+        <div class="footer">
+            Regards,<br>
+            The ByteBrief Team
+        </div>
+    </div>
+</body>
+
+</html>

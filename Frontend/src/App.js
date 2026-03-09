@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import BreakingNewsBanner from './components/sections/BreakingNewsBanner';
@@ -14,6 +15,7 @@ import Categories from './pages/Categories';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Analytics from './pages/Analytics';
+import AccountSettings from './pages/AccountSettings';
 
 const Home = ({ breakingNewsData, heroData, categoriesData, featuredNewsData, statsData, isLoading, animatedText, newsIndex }) => (
   <>
@@ -87,8 +89,20 @@ const ByteBriefWebsite = () => {
     const fetchNews = async () => {
       setIsLoading(true);
       try {
-        // No keywords or categories — fetch from all 10+ sources
-        const data = await generateDigest([], []);
+        // Retrieve token if user is logged in
+        const token = localStorage.getItem('access_token');
+        let userCategories = [];
+
+        if (token) {
+          const { fetchPreferences } = await import('./services/api');
+          const prefs = await fetchPreferences(token);
+          if (prefs && prefs.categories) {
+            userCategories = prefs.categories;
+          }
+        }
+
+        // Fetch customized topics! (Or all, if none selected)
+        const data = await generateDigest([], userCategories);
 
         if (data.articles && data.articles.length > 0) {
           const mappedFeatured = data.articles.slice(0, 8).map((article, idx) => ({
@@ -126,35 +140,40 @@ const ByteBriefWebsite = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "434057962464-k3k9o8d3n2b2l8r7m9t6v5w4c1x0z2y1.apps.googleusercontent.com";
+
   return (
-    <Router>
-      <Layout
-        currentTime={currentTime}
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-      >
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/home" element={
-            <Home
-              breakingNewsData={breakingNewsData}
-              heroData={heroData}
-              categoriesData={categoriesData}
-              featuredNewsData={featuredNewsData}
-              statsData={statsData}
-              isLoading={isLoading}
-              animatedText={animatedText}
-              newsIndex={newsIndex}
-            />
-          } />
-          <Route path="/category/:categoryName" element={<CategoryPage />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/article/:id" element={<ArticleDigestPage />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <GoogleOAuthProvider clientId={clientId}>
+      <Router>
+        <Layout
+          currentTime={currentTime}
+          isMenuOpen={isMenuOpen}
+          setIsMenuOpen={setIsMenuOpen}
+        >
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/home" element={
+              <Home
+                breakingNewsData={breakingNewsData}
+                heroData={heroData}
+                categoriesData={categoriesData}
+                featuredNewsData={featuredNewsData}
+                statsData={statsData}
+                isLoading={isLoading}
+                animatedText={animatedText}
+                newsIndex={newsIndex}
+              />
+            } />
+            <Route path="/category/:categoryName" element={<CategoryPage />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/article/:id" element={<ArticleDigestPage />} />
+            <Route path="/settings" element={<AccountSettings />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </GoogleOAuthProvider>
   );
 };
 

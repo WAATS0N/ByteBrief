@@ -1,0 +1,9 @@
+Hello,
+
+Thank you for signing up for ByteBrief! Please verify your email address to activate your account.
+
+Go to the following link to confirm:
+{{ activate_url }}
+
+Regards,
+The ByteBrief Team

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-w-md;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #111;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+
+        h2 {
+            color: #fff;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(to right, #9333ea, #06b6d4);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .feature-list {
+            padding-left: 20px;
+            color: #ddd;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Welcome to ByteBrief, {{ user.email }}! 📰</h2>
+        <p>Your email has been successfully verified, and your account is now fully active.</p>
+        <p>You can now explore:</p>
+        <ul class="feature-list">
+            <li>Trending news from around the world</li>
+            <li>AI-powered personalized digests</li>
+            <li>Live category updates and analytics</li>
+        </ul>
+        <p><a href="{{ frontend_url }}" class="btn">Go to Dashboard</a></p>
+        <div class="footer">
+            Regards,<br>
+            The ByteBrief Team
+        </div>
+    </div>
+</body>
+
+</html>

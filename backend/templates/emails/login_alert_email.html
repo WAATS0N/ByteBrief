@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-w-md;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #111;
+            border-radius: 12px;
+            border: 1px solid #500;
+        }
+
+        h2 {
+            color: #f43f5e;
+        }
+
+        .info-box {
+            background-color: #222;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #444;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        a {
+            color: #06b6d4;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>New Login Detected</h2>
+        <p>Hello,</p>
+        <p>We detected a new login to your ByteBrief account ({{ user.email }}).</p>
+        <div class="info-box">
+            If this was you, no further action is required.
+        </div>
+        <p>If you did not authorize this login, please <a href="{{ frontend_url }}/login">reset your password</a>
+            immediately to secure your account.</p>
+        <div class="footer">
+            Regards,<br>
+            The ByteBrief Security Team
+        </div>
+    </div>
+</body>
+
+</html>

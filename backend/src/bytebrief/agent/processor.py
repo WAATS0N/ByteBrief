@@ -9,6 +9,24 @@ from io import StringIO
 from pathlib import Path
 from loguru import logger
 
+# Lazy-loaded text summariation pipeline
+_summarizer = None
+
+def get_summarizer():
+    global _summarizer
+    if _summarizer is None:
+        try:
+            from transformers import pipeline
+            logger.info("Loading ML summarization model (this might take a minute on first run)...")
+            # We use a very small, fast distilled model for quick news summarization
+            _summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
+            logger.info("ML summarizer loaded successfully.")
+        except Exception as e:
+            logger.error(f"Failed to load ML summarizer: {e}")
+            _summarizer = "failed"
+            
+    return _summarizer if _summarizer != "failed" else None
+
 # Keyword map for auto-categorization
 CATEGORY_KEYWORDS = {
     'Breaking': ['breaking', 'urgent', 'alert', 'developing', 'just in', 'flash'],
@@ -66,12 +84,58 @@ class DataProcessor:
         self.config = client_config
         
     def process(self, articles: List[Article]) -> Any:
-        """Filter, categorize, and format articles"""
+        """Filter, categorize, save to DB, and format articles"""
         filtered_articles = self._filter_articles(articles)
         # Auto-categorize any article that doesn't already have a category
         for article in filtered_articles:
             if not article.category:
                 article.category = self._categorize_article(article)
+                
+        # Generate ML Summaries
+        summarizer = get_summarizer()
+        if summarizer:
+            logger.info("Generating AI summaries for new articles...")
+            for article in filtered_articles:
+                if article.content and len(article.content) > 150:
+                    try:
+                        # Limit input to 1024 chars to avoid token limits
+                        res = summarizer(article.content[:1024], max_length=130, min_length=30, do_sample=False)
+                        if res and len(res) > 0:
+                            article.content = res[0]['summary_text']  # Replace long content with crisp AI summary
+                    except Exception as e:
+                        logger.warning(f"Summarizer failed for {article.title}: {e}")
+                
+        # Save to Django Database
+        from news_brief.models import Article as DBArticle, Publisher
+        from django.utils import timezone
+        
+        publishers = {p.name: p for p in Publisher.objects.all()}
+        db_articles_to_create = []
+        
+        for article in filtered_articles:
+            publisher = publishers.get(article.source)
+            if not publisher:
+                logger.warning(f"Could not find publisher {article.source} in DB, skipping.")
+                continue
+                
+            db_articles_to_create.append(DBArticle(
+                title=article.title[:500],
+                summary=article.content[:500] + '...' if article.content else 'No summary available.',
+                content=article.content,
+                category=article.category,
+                url=article.url[:1000],
+                image_url=getattr(article, 'image_url', None)[:1000] if hasattr(article, 'image_url') and article.image_url else None,
+                publisher=publisher,
+                published_at=article.published_date or timezone.now()
+            ))
+            
+        try:
+            if db_articles_to_create:
+                DBArticle.objects.bulk_create(db_articles_to_create, ignore_conflicts=True)
+                logger.info(f"Successfully bulk saved {len(db_articles_to_create)} unique articles to DB.")
+        except Exception as e:
+            logger.error(f"Error bulk saving articles to DB: {e}")
+            
         return self._format_output(filtered_articles)
 
     def _categorize_article(self, article: Article) -> str:
@@ -83,7 +147,7 @@ class DataProcessor:
             if score > 0:
                 scores[category] = score
         if scores:
-            return max(scores, key=scores.get)
+            return max(scores.items(), key=lambda x: x[1])[0]
         return 'Global'  # Default fallback
 
     def _filter_articles(self, articles: List[Article]) -> List[Article]:

@@ -9,7 +9,7 @@ news_sources:
       author: ".qa-contributor-name"
       date: "time"
       link: "a.gs-c-promo-heading"
-    rate_limit: 2
+    rate_limit: 0
     
   cnn:
     name: "CNN"
@@ -21,7 +21,7 @@ news_sources:
       author: ".byline__name"
       date: ".timestamp"
       link: "a.container__link"
-    rate_limit: 2
+    rate_limit: 0
     
   reuters:
     name: "Reuters"
@@ -33,7 +33,7 @@ news_sources:
       author: "[data-testid='AuthorName']"
       date: "time"
       link: "a[data-testid='Heading']"
-    rate_limit: 1
+    rate_limit: 0
     
   techcrunch:
     name: "TechCrunch"
@@ -45,7 +45,7 @@ news_sources:
       author: ".article__byline a"
       date: ".article__byline time"
       link: "a.post-block__title__link"
-    rate_limit: 2
+    rate_limit: 0
     
   guardian:
     name: "The Guardian"
@@ -57,34 +57,34 @@ news_sources:
       author: ".byline a"
       date: "time"
       link: "a.fc-item__link"
-    rate_limit: 1
+    rate_limit: 0
 
   aljazeera:
     name: "Al Jazeera"
     base_url: "https://www.aljazeera.com"
     rss_feed: "https://www.aljazeera.com/xml/rss/all.xml"
-    rate_limit: 2
+    rate_limit: 0
 
   apnews:
     name: "AP News"
     base_url: "https://apnews.com"
     rss_feed: "https://rsshub.app/apnews/topics/apf-topnews"
-    rate_limit: 2
+    rate_limit: 0
 
   espn:
     name: "ESPN"
     base_url: "https://www.espn.com"
     rss_feed: "https://www.espn.com/espn/rss/news"
-    rate_limit: 2
+    rate_limit: 0
 
   npr:
     name: "NPR"
     base_url: "https://www.npr.org"
     rss_feed: "https://feeds.npr.org/1001/rss.xml"
-    rate_limit: 2
+    rate_limit: 0
 
   arstechnica:
     name: "Ars Technica"
     base_url: "https://arstechnica.com"
     rss_feed: "https://feeds.arstechnica.com/arstechnica/index"
-    rate_limit: 2
+    rate_limit: 0

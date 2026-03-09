@@ -47,31 +47,31 @@ class AgentOrchestrator:
         # 1. Always scrape ALL configured RSS sources first for broad coverage
         # 2. If specific keywords are present, also run Google Search for targeted results
 
-        all_source_names = list(self.sources_config.get('news_sources', {}).keys())
-
-        logger.info(f"Scraping {len(all_source_names)} news sources: {all_source_names}")
-        for source_name in all_source_names:
-            scraper = ScraperFactory.create_scraper(source_name, full_config)
-            if scraper:
-                try:
-                    logger.info(f"Scraping {source_name}...")
-                    articles = scraper.scrape()
-                    logger.info(f"  Got {len(articles)} articles from {source_name}")
-                    all_articles.extend(articles)
-                except Exception as e:
-                    logger.error(f"Scraper {source_name} failed: {e}")
-            else:
-                logger.warning(f"No scraper found for {source_name}, skipping.")
+        # Query active publishers from the database
+        from news_brief.models import Publisher
+        from ..scrapers.async_universal import AsyncUniversalScraper
+        import asyncio
+        
+        publishers = list(Publisher.objects.filter(is_active=True))
+        logger.info(f"Scraping {len(publishers)} active news sources concurrently...")
+        
+        scraper = AsyncUniversalScraper(
+            timeout=full_config.get('scraper_config', {}).get('timeout', 10),
+            max_articles=full_config.get('scraper_config', {}).get('max_articles_per_source', 10)
+        )
+        
+        # Run async scraper concurrently
+        articles = asyncio.run(scraper.scrape_all(publishers))
+        all_articles.extend(articles)
 
         # If keywords also provided, supplement with Google Search
         if client_config.keywords:
             logger.info(f"Supplementing with Google Search for keywords: {client_config.keywords}")
             domains = []
-            for source_name in all_source_names:
-                source_cfg = self.sources_config.get('news_sources', {}).get(source_name)
-                if source_cfg and 'base_url' in source_cfg:
+            for pub in publishers:
+                if pub.base_url:
                     from urllib.parse import urlparse
-                    domain = urlparse(source_cfg['base_url']).netloc.replace('www.', '')
+                    domain = urlparse(pub.base_url).netloc.replace('www.', '')
                     domains.append(domain)
 
             search_scraper = GoogleSearchScraper(full_config)

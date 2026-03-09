@@ -1,0 +1,326 @@
+Let’s treat ByteBrief like a real production system and move it from “cool scraper project” → “global news intelligence engine.”
+
+Your research already reveals the current architecture:
+
+RSS feeds → headlines
+
+Scraper → article text
+
+Google search scraper → keyword discovery
+
+That’s a solid Phase 1 system. Now we move into Phase 2: Scaling the News Pipeline.
+
+Think of this like building a factory line:
+
+Sources → Collector → Processor → Storage → API → Frontend
+
+Let’s walk through what you should implement next, including actual developer commands and tasks.
+
+ByteBrief — Phase 2 Development Instructions
+1. Expand News Sources (Global Coverage)
+
+Right now you have about 10 RSS feeds.
+
+That’s tiny. The world has thousands of feeds. 🌍
+
+There are ~17,000 newspaper titles in India alone.
+
+Your goal:
+
+10 sources → 200+ sources
+Step
+
+Open:
+
+backend/config/sources.yaml
+
+Add more RSS feeds.
+
+Example:
+
+sources:
+
+  - name: The Hindu
+    country: India
+    rss: https://www.thehindu.com/news/national/feeder/default.rss
+
+  - name: Times of India
+    country: India
+    rss: https://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms
+
+  - name: NDTV
+    country: India
+    rss: https://feeds.feedburner.com/ndtvnews-top-stories
+
+  - name: India Today
+    country: India
+    rss: https://www.indiatoday.in/rss/home
+
+Then restart the backend.
+
+2. Organize Sources by Country
+
+Modify your sources.yaml structure.
+
+Current:
+
+BBC
+CNN
+Reuters
+
+New structure:
+
+sources:
+
+  india:
+    - name: NDTV
+      rss: https://feeds.feedburner.com/ndtvnews-top-stories
+
+  usa:
+    - name: CNN
+      rss: https://rss.cnn.com/rss/edition.rss
+
+  europe:
+    - name: BBC
+      rss: https://feeds.bbci.co.uk/news/rss.xml
+
+Why?
+
+Because your frontend will later support:
+
+World
+India
+USA
+Europe
+Asia
+Africa
+Technology
+Sports
+3. Add News API (Optional but Powerful)
+
+Your system currently uses only scraping.
+
+Add a News API fallback.
+
+Example:
+
+pip install requests
+
+Create:
+
+backend/src/bytebrief/apis/news_api.py
+
+Example code:
+
+import requests
+
+API_KEY = "your_api_key"
+
+def fetch_news(query="technology"):
+    url = f"https://newsapi.org/v2/everything?q={query}&apiKey={API_KEY}"
+    response = requests.get(url)
+    return response.json()
+
+This gives thousands of sources instantly.
+
+4. Speed Up Scraping (Async Requests)
+
+Your scraper currently runs sequentially.
+
+That is slow.
+
+Upgrade it to async scraping.
+
+Install:
+
+pip install aiohttp asyncio
+
+Example:
+
+import aiohttp
+import asyncio
+
+async def fetch(session, url):
+    async with session.get(url) as response:
+        return await response.text()
+
+async def fetch_all(urls):
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch(session, url) for url in urls]
+        return await asyncio.gather(*tasks)
+
+Now you fetch 20 articles simultaneously.
+
+Speed improvement:
+
+Before: 5 minutes
+After: 5–10 seconds
+5. Add Article Deduplication
+
+Right now if 5 websites publish the same news, you store 5 copies.
+
+You need duplicate filtering.
+
+Install:
+
+pip install simhash
+
+Example:
+
+from simhash import Simhash
+
+def hash_article(text):
+    return Simhash(text).value
+
+Store hash in database.
+
+If hash already exists → skip article.
+
+6. Add AI News Summarization
+
+Your project becomes very powerful here.
+
+Install transformers:
+
+pip install transformers torch
+
+Example summarizer:
+
+from transformers import pipeline
+
+summarizer = pipeline("summarization")
+
+def summarize(text):
+    result = summarizer(text, max_length=60)
+    return result[0]['summary_text']
+
+Now each article becomes:
+
+Title
+AI Summary
+Source
+Link
+7. Add Background Tasks (Cron Job)
+
+Your scraper should run automatically.
+
+Option A (simple)
+
+Use cron job
+
+Example:
+
+*/15 * * * * python manage.py fetch_news
+
+Runs every 15 minutes.
+
+Option B (professional)
+
+Use Celery
+
+Install:
+
+pip install celery redis django-celery-beat
+
+Start worker:
+
+celery -A bytebrief worker -l info
+
+Start scheduler:
+
+celery -A bytebrief beat -l info
+8. Create Database Models
+
+Example Django model:
+
+class Publisher(models.Model):
+    name = models.CharField(max_length=200)
+    country = models.CharField(max_length=100)
+    rss_url = models.URLField()
+
+class Article(models.Model):
+    title = models.CharField(max_length=500)
+    summary = models.TextField()
+    url = models.URLField(unique=True)
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
+    published_at = models.DateTimeField()
+9. Add User Personalization
+
+Users should choose topics:
+
+Technology
+Politics
+Sports
+AI
+Finance
+
+Create model:
+
+class UserPreference(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=100)
+
+Now your system generates personalized news feeds.
+
+10. Add Daily News Digest Email
+
+Example email:
+
+Subject: Your Daily ByteBrief Digest
+
+Top Stories Today:
+
+1. AI Breakthrough in Healthcare
+2. India Tech Market Growth
+3. Global Climate Policy Update
+
+This runs once per day.
+
+Final Architecture (Your Project)
+RSS Feeds
+News APIs
+Scrapers
+      ↓
+Collector Agent
+      ↓
+Deduplication Engine
+      ↓
+AI Summarizer
+      ↓
+Database
+      ↓
+Django API
+      ↓
+Website / Email Digest
+
+That is essentially how real news aggregators work.
+
+Think:
+
+Google News
+Apple News
+Feedly
+
+They all follow this structure.
+
+If I were leading your project
+
+Your next 3 milestones should be:
+
+Milestone 1
+
+Increase sources:
+
+10 → 100 RSS feeds
+Milestone 2
+
+Add:
+
+AI summarization
+deduplication
+Milestone 3
+
+Add:
+
+country-based news
+daily email digest

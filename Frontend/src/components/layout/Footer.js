@@ -2,7 +2,7 @@ import React from 'react';
 import { Brain } from 'lucide-react';
 
 const Footer = () => (
-  <footer className="bg-gray-900 py-12 border-t border-gray-800">
+  <footer className="relative z-10 bg-gray-900 py-12 border-t border-gray-800">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <div className="flex items-center justify-center space-x-2 mb-4">
         <Brain className="h-6 w-6 text-purple-400" />

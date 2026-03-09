@@ -25,7 +25,7 @@ const Categories = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-black pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-black pt-8 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
                     <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-4">
