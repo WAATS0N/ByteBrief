@@ -61,6 +61,8 @@ from .models import Article as DBArticle, UserPreference
 from django.utils import timezone
 from datetime import timedelta
 
+from django.db.models import Q
+
 @csrf_exempt
 def generate_digest_api(request):
     if request.method == 'POST':
@@ -71,12 +73,22 @@ def generate_digest_api(request):
             sources = data.get('sources', [])
 
             # Fetch recent articles from DB (last 48 hours to keep it fresh)
-            time_threshold = timezone.now() - timedelta(days=2)
-            qs = DBArticle.objects.select_related('publisher').filter(published_at__gte=time_threshold).order_by('-published_at')
+            time_threshold = timezone.now() - timedelta(days=90)  # Extended to 90 days so existing articles are always included
+            qs = DBArticle.objects.select_related('publisher').filter(published_at__gte=time_threshold)
+            
+            if keywords:
+                # Combine keywords with OR logic for title and summary
+                q_objects = Q()
+                for keyword in keywords:
+                    q_objects |= Q(title__icontains=keyword) | Q(summary__icontains=keyword) | Q(content__icontains=keyword)
+                qs = qs.filter(q_objects)
+            
+            qs = qs.order_by('-published_at')
             
             # For simplicity matching the old keyword/category filter format
             articles = []
             if categories:
+                # Case-insensitive match: URL params arrive as 'tech', DB stores 'Tech'
                 cat_lower = [c.lower() for c in categories]
                 filtered_qs = [a for a in qs if (a.category or '').lower() in cat_lower]
             else:
@@ -111,7 +123,11 @@ def generate_digest_api(request):
     
     return JsonResponse({'status': 'error', 'message': 'Only POST method allowed'}, status=405)
 
-@csrf_exempt
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def user_preferences_api(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
@@ -125,7 +141,7 @@ def user_preferences_api(request):
         
     elif request.method == 'POST':
         try:
-            data = json.loads(request.body)
+            data = request.data
             categories = data.get('categories', [])
             pref, created = UserPreference.objects.get_or_create(user=request.user)
             pref.categories = categories
@@ -138,4 +154,75 @@ def user_preferences_api(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
             
+    return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+
+from .models import Bookmark
+
+@api_view(['GET', 'POST', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def user_bookmarks_api(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
+
+    if request.method == 'GET':
+        bookmarks = Bookmark.objects.filter(user=request.user).select_related('article')
+        data = []
+        for b in bookmarks:
+            a = b.article
+            data.append({
+                'id': a.id,
+                'title': a.title,
+                'content': a.summary or a.content,
+                'source': a.publisher.name if a.publisher else 'Unknown',
+                'url': a.url,
+                'image_url': a.image_url,
+                'published_date': a.published_at.strftime("%Y-%m-%d %H:%M:%S") if a.published_at else None,
+                'category': a.category or 'Global',
+                'bookmarked_at': b.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            })
+        return JsonResponse({
+            'status': 'success',
+            'bookmarks': data
+        })
+
+    elif request.method == 'POST':
+        try:
+            data = request.data
+            # We assume frontend passes an article_id to bookmark
+            article_id = data.get('article_id')
+            # It could also pass a URL if the article isn't guaranteed to be the DB ID...
+            article_url = data.get('article_url')
+
+            article = None
+            if article_id:
+                article = DBArticle.objects.get(id=article_id)
+            elif article_url:
+                article = DBArticle.objects.get(url=article_url)
+                
+            if not article:
+                return JsonResponse({'status': 'error', 'message': 'Article not found'}, status=404)
+
+            # Create the bookmark
+            Bookmark.objects.get_or_create(user=request.user, article=article)
+            return JsonResponse({'status': 'success', 'message': 'Article bookmarked'})
+        except DBArticle.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Article not found in database'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+    elif request.method == 'DELETE':
+        try:
+            data = request.data
+            article_id = data.get('article_id')
+            article_url = data.get('article_url')
+            
+            if article_id:
+                Bookmark.objects.filter(user=request.user, article_id=article_id).delete()
+            elif article_url:
+                Bookmark.objects.filter(user=request.user, article__url=article_url).delete()
+                
+            return JsonResponse({'status': 'success', 'message': 'Bookmark removed'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
     return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)

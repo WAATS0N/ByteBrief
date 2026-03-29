@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Byte-Brief Logo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Playfair+Display:wght@700;900&family=IM+Fell+English:ital@1&family=Special+Elite&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .logo-wrapper {
+    padding: 40px;
+  }
+
+  .logo-container {
+    position: relative;
+    width: 680px;
+    height: 320px;
+    background: #f5f0e8;
+    border: 3px solid #1a1a1a;
+    box-shadow: 8px 8px 0 #000, 16px 16px 0 rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+
+  /* Newspaper texture overlay */
+  .logo-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 22px,
+        rgba(0,0,0,0.06) 22px,
+        rgba(0,0,0,0.06) 23px
+      );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Aged paper grain */
+  .noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+    background-size: 256px;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+  }
+
+  /* Top decorative rule */
+  .top-rule {
+    position: absolute;
+    top: 18px;
+    left: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 5;
+  }
+
+  .rule-line {
+    flex: 1;
+    height: 2px;
+    background: #1a1a1a;
+  }
+
+  .rule-dot {
+    width: 5px;
+    height: 5px;
+    background: #1a1a1a;
+    border-radius: 50%;
+  }
+
+  .rule-diamond {
+    width: 8px;
+    height: 8px;
+    background: #1a1a1a;
+    transform: rotate(45deg);
+  }
+
+  .tagline-top {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Special Elite', cursive;
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    white-space: nowrap;
+    z-index: 6;
+  }
+
+  /* Bottom rule */
+  .bottom-rule {
+    position: absolute;
+    bottom: 18px;
+    left: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 5;
+  }
+
+  /* Main masthead */
+  .masthead {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .brand-name {
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: 92px;
+    color: #0d0d0d;
+    line-height: 0.95;
+    letter-spacing: -2px;
+    position: relative;
+    display: inline-block;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+  }
+
+  /* Highlighted "B" letters */
+  .brand-name .highlight {
+    color: #8b0000;
+    position: relative;
+  }
+
+  .brand-name .dash {
+    color: #555;
+    font-size: 72px;
+  }
+
+  /* Subtitle strip */
+  .subtitle-strip {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a1a;
+    color: #f5f0e8;
+    font-family: 'Special Elite', cursive;
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    padding: 6px 28px;
+    white-space: nowrap;
+    z-index: 10;
+  }
+
+  /* Vertical column dividers */
+  .col-divider {
+    position: absolute;
+    top: 55px;
+    bottom: 55px;
+    width: 1px;
+    background: rgba(0,0,0,0.25);
+    z-index: 3;
+  }
+
+  .col-divider.left { left: 100px; }
+  .col-divider.right { right: 100px; }
+
+  /* Filler text columns */
+  .filler-text {
+    position: absolute;
+    font-family: 'IM Fell English', serif;
+    font-size: 7px;
+    line-height: 1.6;
+    color: rgba(0,0,0,0.35);
+    z-index: 4;
+    top: 60px;
+    bottom: 75px;
+    overflow: hidden;
+  }
+  .filler-text.left-col { left: 14px; width: 78px; }
+  .filler-text.right-col { right: 14px; width: 78px; }
+
+  /* Date line */
+  .dateline {
+    position: absolute;
+    bottom: 36px;
+    left: 30px;
+    font-family: 'Special Elite', cursive;
+    font-size: 8px;
+    color: rgba(0,0,0,0.5);
+    letter-spacing: 1.5px;
+    z-index: 10;
+  }
+
+  .edition {
+    position: absolute;
+    bottom: 36px;
+    right: 30px;
+    font-family: 'Special Elite', cursive;
+    font-size: 8px;
+    color: rgba(0,0,0,0.5);
+    letter-spacing: 1.5px;
+    z-index: 10;
+  }
+
+  /* Ink splatter / stamp effect */
+  .stamp {
+    position: absolute;
+    top: 55px;
+    right: 34px;
+    width: 64px;
+    height: 64px;
+    border: 3px solid rgba(139,0,0,0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-12deg);
+    z-index: 12;
+  }
+  .stamp-text {
+    font-family: 'Special Elite', cursive;
+    font-size: 8px;
+    color: rgba(139,0,0,0.6);
+    letter-spacing: 1px;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  /* Small decorative ornament */
+  .ornament {
+    font-size: 16px;
+    color: #8b0000;
+    display: inline-block;
+    margin: 0 6px;
+    vertical-align: middle;
+    opacity: 0.7;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="logo-wrapper">
+  <div class="logo-container">
+    <div class="noise"></div>
+
+    <!-- Filler columns -->
+    <div class="filler-text left-col">
+      The morning dispatch of all things digital and notable. Our correspondents report from every corner of the network. Latest bulletins and dispatches from the wire. Breaking developments in technology, science, and world affairs. Trusted reporting since the dawn of the information age. All the news that bytes to print.
+    </div>
+    <div class="filler-text right-col">
+      Compiled daily for the discerning reader of modern intelligence. From the server rooms to the streets, we bring you the briefings that matter most. Short, sharp, and to the point — the news in a byte. Subscribe for morning and evening editions delivered directly.
+    </div>
+
+    <!-- Column dividers -->
+    <div class="col-divider left"></div>
+    <div class="col-divider right"></div>
+
+    <!-- Top decorative rule -->
+    <div class="top-rule">
+      <div class="rule-line"></div>
+      <div class="rule-diamond"></div>
+      <div class="rule-line"></div>
+    </div>
+
+    <div class="tagline-top">★ &nbsp; The Digital News Digest &nbsp; ★</div>
+
+    <!-- Stamp / seal -->
+    <div class="stamp">
+      <div class="stamp-text">AI<br/>POWERED<br/>NEWS</div>
+    </div>
+
+    <!-- Main logo text -->
+    <div class="masthead">
+      <div class="brand-name">
+        <span class="highlight">B</span>yte<span class="dash">-</span><span class="highlight">B</span>rief
+      </div>
+    </div>
+
+    <!-- Subtitle strip -->
+    <div class="subtitle-strip">
+      <span class="ornament">◆</span> Your News. Your Byte. <span class="ornament">◆</span>
+    </div>
+
+    <!-- Bottom rule -->
+    <div class="bottom-rule">
+      <div class="rule-line"></div>
+      <div class="rule-diamond"></div>
+      <div class="rule-dot"></div>
+      <div class="rule-diamond"></div>
+      <div class="rule-line"></div>
+    </div>
+
+    <!-- Date / edition -->
+    <div class="dateline">EST. 2025 · VOL. I</div>
+    <div class="edition">DIGITAL EDITION</div>
+  </div>
+</div>
+
+</body>
+</html>

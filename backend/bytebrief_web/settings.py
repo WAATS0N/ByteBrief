@@ -29,7 +29,11 @@ SECRET_KEY = 'django-insecure-x$o#7xn@2%^0^=xw+cq32yp64ogs#es!-c$o5_0@t$5fvmfecl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "10.158.95.192",
+    "127.0.0.1"
+]
 
 
 # Application definition
@@ -146,9 +150,7 @@ STATICFILES_DIRS = [
     BASE_DIR.parent / 'frontend/build/static',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 # --- Authentication Configuration ---
@@ -156,6 +158,7 @@ CORS_ALLOW_CREDENTIALS = True
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 

@@ -83,7 +83,7 @@ const Login = () => {
             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full blur-[120px] pointer-events-none" />
 
             <div className="max-w-md w-full relative z-10">
-                <div className="text-center mb-8 bg-gray-900/40 p-10 rounded-3xl border border-gray-800 backdrop-blur-xl">
+                <div className="text-center mb-8 bg-gray-900/40 p-6 sm:p-10 rounded-3xl border border-gray-800 backdrop-blur-xl">
                     <Link to="/" className="inline-flex items-center justify-center space-x-2 mb-8 mx-auto">
                         <div className="bg-gradient-to-r from-purple-500 to-cyan-500 p-2 rounded-xl">
                             <Brain className="h-8 w-8 text-white" />

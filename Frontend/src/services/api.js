@@ -69,3 +69,37 @@ export const savePreferences = async (token, categories) => {
         return null;
     }
 };
+
+export const fetchBookmarks = async (token) => {
+    try {
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const response = await fetch(`${API_BASE_URL}/user/bookmarks/`, { headers });
+        if (!response.ok) throw new Error('Failed to fetch bookmarks');
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch bookmarks:", error);
+        return { status: 'error', bookmarks: [] };
+    }
+};
+
+export const toggleBookmark = async (token, articleUrl, isBookmarked) => {
+    try {
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const method = isBookmarked ? 'DELETE' : 'POST';
+        const response = await fetch(`${API_BASE_URL}/user/bookmarks/`, {
+            method,
+            headers,
+            body: JSON.stringify({ article_url: articleUrl })
+        });
+        
+        if (!response.ok) throw new Error('Failed to toggle bookmark');
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to toggle bookmark:", error);
+        return { status: 'error' };
+    }
+};

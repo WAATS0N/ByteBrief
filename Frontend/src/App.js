@@ -10,12 +10,14 @@ import StatsSection from './components/sections/StatsSection';
 import { useRealTime } from './hooks/useRealTime';
 import { generateDigest, fetchMetadata } from './services/api';
 import CategoryPage from './pages/CategoryPage';
+import SearchPage from './pages/SearchPage';
 import ArticleDigestPage from './pages/ArticleDigestPage';
 import Categories from './pages/Categories';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Analytics from './pages/Analytics';
 import AccountSettings from './pages/AccountSettings';
+import SavedNews from './pages/SavedNews';
 
 const Home = ({ breakingNewsData, heroData, categoriesData, featuredNewsData, statsData, isLoading, animatedText, newsIndex }) => (
   <>
@@ -166,9 +168,11 @@ const ByteBriefWebsite = () => {
                 newsIndex={newsIndex}
               />
             } />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/category/:categoryName" element={<CategoryPage />} />
             <Route path="/categories" element={<Categories />} />
             <Route path="/article/:id" element={<ArticleDigestPage />} />
+            <Route path="/saved" element={<SavedNews />} />
             <Route path="/settings" element={<AccountSettings />} />
           </Routes>
         </Layout>

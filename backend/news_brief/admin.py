@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Publisher, Article, UserPreference
+from .models import Publisher, Article, UserPreference, Bookmark
 
 @admin.register(Publisher)
 class PublisherAdmin(admin.ModelAdmin):
@@ -18,3 +18,9 @@ class ArticleAdmin(admin.ModelAdmin):
 class UserPreferenceAdmin(admin.ModelAdmin):
     list_display = ('user', 'created_at')
     search_fields = ('user__username', 'user__email')
+
+@admin.register(Bookmark)
+class BookmarkAdmin(admin.ModelAdmin):
+    list_display = ('user', 'article', 'created_at')
+    list_filter = ('created_at',)
+    search_fields = ('user__username', 'article__title')

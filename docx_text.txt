@@ -1,0 +1,3844 @@
+ByteBrief:
+ 
+AI-Powered
+ 
+News
+ 
+Digest
+ 
+Platform
+Saravanan 
+R
+Department of Artificial Intelligence and Data Science Velammal Engineering College, Chennai, Tamil Nadu, 
+India 
+rsaravanan182004@gmail.com
+Waatson
+ 
+J
+Department of Artificial Intelligence and Data Science Velammal Engineering College, Chennai, Tamil Nadu, 
+India 
+waatson.j@gmail.com
+Udhayakumar
+ 
+R
+Department of Artificial Intelligence and Data Science Velammal Engineering College, Chennai, Tamil Nadu, 
+India 
+r.udhayakumar0726@gmail.com
+Mrs.
+ 
+Karthika
+ 
+L
+Department of Artificial Intelligence and Data Science Velammal Engineering College, Chennai, Tamil Nadu, 
+India 
+karthika.l@velammal.edu.in
+Abstract
+—In the digital age, the rapid growth of 
+online information
+ 
+has
+ 
+created
+ 
+a
+ 
+problem
+ 
+called
+ 
+”information
+ 
+overload.” People find it hard to process the huge amount of news content available
+ 
+every
+ 
+day.
+ 
+Traditional
+ 
+ways
+ 
+of
+ 
+consuming
+ 
+news
+ 
+take a
+ 
+lot
+ 
+of
+ 
+time
+ 
+and
+ 
+often
+ 
+lack
+ 
+personalization.
+ 
+This
+ 
+results
+ 
+in
+ 
+a decrease in engagement and important knowledge gaps.This paper introduces ByteBrief, an AI-powered news aggregation
+ 
+and summarization platform created to help with information overload. Provides short, personalized news summaries. The system turns endless streams of information into clear insights using Natural Language Processing (NLP) and sentiment-aware content
+ 
+delivery.ByteBrief
+ 
+has
+ 
+a
+ 
+modular
+ 
+structure
+ 
+that
+ 
+includes
+ 
+a multi-source
+ 
+news
+ 
+scraping
+ 
+engine,
+ 
+an
+ 
+AI-driven
+ 
+analysis
+ 
+module that uses specialized agents for Breaking, Business, Tech, and Sports news, and a responsive frontend built with React and TailwindCSS. The backend uses Django and Python 3.12+ for strong
+ 
+data
+ 
+processing,
+ 
+while
+ 
+SQLite
+ 
+provides
+ 
+effective
+ 
+local
+ 
+data management
+ 
+during
+ 
+development.
+ 
+Key
+ 
+features
+ 
+include
+ 
+extractive and abstract summarization, sentiment analysis, and detection
+ 
+of duplicate articles. Experimental results show that ByteBrief cuts news consumption time by around 70percent while keeping high content relevance and accuracy. This project aims to make news consumption efficient, smart, and accessible for everyone
+ 
+by providing concise news summaries for busy people. Future improvements will include multi-language support, predictive trend analytics, and collaboration tools for businesses.
+Introduction
+Background
+ 
+and
+ 
+Motivation
+Digital media has changed how we consume 
+information. Using Data Analytics it is estimated that 2.5 Quintillion bytes of
+ 
+data
+ 
+are
+ 
+created
+ 
+each
+ 
+day.
+ 
+Majority
+ 
+of
+ 
+this
+ 
+data
+ 
+consists of news articles, blogs and social media. Although the ability to access Information has progressed, it has also created a major
+ 
+problem
+ 
+-
+ 
+Information
+ 
+Overload.
+ 
+The
+ 
+term
+ 
+’Information Overload’
+ 
+was
+ 
+first
+ 
+coined
+ 
+by
+ 
+Bertram
+ 
+Gross
+ 
+in
+ 
+1964,
+ 
+however it became more of an issue when Alvin Toffler made it mainstream.
+ 
+The
+ 
+issue
+ 
+occurs
+ 
+when
+ 
+the
+ 
+volume
+ 
+of
+ 
+information exceeds a person’s ability to process it, leading to stress, lack of ability to make decisions, and decreased productivity. With regards to the consumption of news, on any given day a user consumes thousands of headlines from a variety of platforms. The use of traditional aggregators (news websites) only com- pounds
+ 
+the
+ 
+problem,
+ 
+as
+ 
+they
+ 
+present
+ 
+information
+ 
+in
+ 
+a
+ 
+linear
+way, without context, prioritization or summarization. 
+This places an undue burden on the user who must filter through irrelevant content, verify sources and synthesize information,
+ 
+a process that has become unmanageable within today’s fast paced professional environment. The vision of ByteBrief is realised through the urgent need to make the divide between data availability and human cognitive ability less extreme through the use of Automation/Curation of Content. AI can
+ 
+be used to automate much of the curation process which
+ 
+would allow for the continued democratization of access to knowledge in a manner that optimizes the productivity of all end users.
+Problem
+ 
+Statement
+Existing news consumption platforms suffer from 
+several critical limitations: Most aggregators deliver a standard news feed which does not take into account the particular needs of users
+ 
+who
+ 
+have
+ 
+different
+ 
+reading
+ 
+preferences
+ 
+and
+ 
+work
+ 
+require- ments.
+ 
+Users
+ 
+need
+ 
+to
+ 
+read
+ 
+complete
+ 
+articles
+ 
+because
+ 
+they
+ 
+want to find essential information which leads to wasting time that should have gone to making decisions or carrying out work. Users face the risk of accessing false information because the platform
+ 
+lacks
+ 
+automated
+ 
+fact-checking
+ 
+and
+ 
+sentiment
+ 
+analysis which enables users to trust news sources without verifica- tion. Multiple websites separate news content which requires users to change between different contexts that breaks their concentration. The market needs a system that combines news aggregation
+ 
+with
+ 
+advanced
+ 
+processing
+ 
+capabilities.
+ 
+The
+ 
+system requires
+ 
+the
+ 
+ability
+ 
+to
+ 
+scrape
+ 
+information
+ 
+from
+ 
+multiple
+ 
+sources while removing duplicate content and conducting sentiment analysis and summarizing important details and creating an entire report that matches the user’s particular requirements.
+Proposed
+ 
+Solution:
+ 
+Byte
+ 
+Brief
+There will be one major new product called 
+ByteBrief.
+ 
+This
+ 
+will
+ 
+be
+ 
+an
+ 
+overall
+ 
+solution
+ 
+to
+ 
+these
+ 
+problems.
+ 
+Byte- Brief is an intelligent news aggregator/summarizer that will take huge amounts of information flowing in and convert
+ 
+them into concise summary content. The ByteBrief system architecture
+ 
+consists
+ 
+of
+ 
+three
+ 
+layers:
+ 
+Ingestion
+ 
+Layer-
+ 
+Using
+ 
+a
+robust scraping engine, this layer will scrape news from 
+many external
+ 
+news
+ 
+providers
+ 
+such
+ 
+as
+ 
+BBC,
+ 
+CNN,
+ 
+and
+ 
+Reuters
+ 
+while observing
+ 
+and
+ 
+implementing
+ 
+respected
+ 
+rate
+ 
+limiting,
+ 
+and
+ 
+using duplicate detection. Intelligence Layer - A core layer that will utilize AI for core categorization/summarization/outputting importance ratings via specialized agents (Breaking News, Business, Tech, Sports) is located in this layer. Presentation Layer - A layer built using React, that delivers a responsive and personalized news digest to users in a clean and easy-to- read format. Utilizing advanced Natural language processing (NLP) techniques such as Transformer-based summarization and sentiment analysis, ByteBrief will provide users with intelligence as well as news. ByteBrief is intended to be scalable, secure, and user-centric while achieving the goal of making news consumption accessible and efficient for all.
+Principal
+ 
+Contributions
+The
+ 
+following
+ 
+are
+ 
+the
+ 
+main
+ 
+contributions
+ 
+of
+ 
+this
+ 
+study:
+Creation
+ 
+of
+ 
+a
+ 
+Modular
+ 
+News
+ 
+Scraping
+ 
+Engine:
+ 
+A
+ 
+scalable backend system that can automatically extract metadata and deduplicate data from several sources.
+AI Specialized Agent Implementation: Relevance is 
+im- proved over generic models by distinct AI agents trained to handle certain domains (e.g., Financial Markets vs. Technology Trends).
+A hybrid summarizing pipeline combines extractive 
+and abstractive
+ 
+summarization
+ 
+methods
+ 
+to
+ 
+guarantee
+ 
+linguistic fluency and factual accuracy.
+A
+ 
+framework
+ 
+for
+ 
+monitoring
+ 
+user
+ 
+preferences
+ 
+and
+ 
+reading habits in order to dynamically modify the way content is delivered is known as user-centric personalization.
+Performance
+ 
+optimization
+ 
+is
+ 
+the
+ 
+use
+ 
+of
+ 
+contemporary
+ 
+tech stacks (Django, React, UV) to guarantee high concur- rency handling and low latency answers.
+Organization
+ 
+of
+ 
+the
+ 
+Paper
+The rest of this paper is organized as follows; Section 
+II offers
+ 
+a
+ 
+literature
+ 
+review
+ 
+on
+ 
+the
+ 
+existing
+ 
+news
+ 
+aggregation
+ 
+and NLP systems. Section III covers the system design and mod- ular architecture. Section IV illustrates architecture diagrams and
+ 
+data
+ 
+flow.
+ 
+Section
+ 
+V
+ 
+further
+ 
+describes
+ 
+the
+ 
+methodology,
+ 
+in- cluding all algorithms and mathematical formulations. Lastly, Section VI discusses the implementation details, technology stack, and code structure. Section VII gives a performance evaluation and result discussion. Future work and enhance- ments
+ 
+are
+ 
+outlined
+ 
+in
+ 
+Section
+ 
+VIII,
+ 
+respectively.
+ 
+Lastly,
+ 
+section IX makes the conclusion for the paper.
+Literature
+ 
+Review
+The
+ 
+development
+ 
+of
+ 
+ByteBrief
+ 
+is
+ 
+based
+ 
+on
+ 
+research
+ 
+in three main areas: collecting data from the web summarizing text using Natural Language Processing (NLP) and creating personalized recommendations. This section looks at existing research to find gaps that ByteBrief aims to fill
+Collecting
+ 
+News
+ 
+Automatically
+ 
+Scraping
+Any news gathering system needs to collect data 
+reliably. Early
+ 
+systems
+ 
+mainly
+ 
+used
+ 
+RSS
+ 
+feeds,
+ 
+which
+ 
+are
+ 
+structured
+ 
+but not very comprehensive. Singh and others (2021) suggested a way
+ 
+to
+ 
+crawl
+ 
+the
+ 
+web
+ 
+for
+ 
+news
+ 
+in
+ 
+time.
+ 
+They
+ 
+said
+ 
+it’s
+ 
+crucial
+ 
+to collect data at a rate to avoid being blocked and to ensure the data
+ 
+is
+ 
+up-to-date.
+ 
+However
+ 
+their
+ 
+system
+ 
+did
+ 
+not
+ 
+have
+ 
+a
+ 
+way
+ 
+to remove duplicates, which led to storing the same information multiple times.Nangoy and Shabrina (2020) looked at using chatbots to classify images in commerce. Their method of collecting data showed that it’s essential to extract details
+ 
+(like the headline, author and timestamp) to help with further processing. ByteBrief uses this standard to index information 
+consistently.
+Recently scraping has involved using browsers (like 
+Sele- nium or Playwright) to handle news sites that use a lot of JavaScript. While this works it can be slow. ByteBrief makes this faster by using APIs to collect data when available and falling back to tools like BeautifulSoup or Scrapy, for static content. This way it balances speed and coverage.
+Natural
+ 
+Language
+ 
+Processing
+ 
+and
+ 
+Summarization
+Summarization is the core intelligence of the ByteBrief. 
+It decreases cognitive overload by shortening the text without altering the semantics.
+Extractive vs Abstractive: Older systems used 
+extractive summarization techniques (selecting key sentences). Kolte et al. (2022) showed that extractive summarization is always
+ 
+safe with facts but lacks flow. On the other hand, abstractive approaches
+ 
+(creating
+ 
+new
+ 
+sentences)
+ 
+via
+ 
+Transformer
+ 
+architec- tures (e.g., BART or T5) ensure higher readability at the risk of hallucination. Instead, ByteBrief takes a hybrid approach, relying
+ 
+on
+ 
+the
+ 
+extractive
+ 
+method
+ 
+to
+ 
+ensure
+ 
+key
+ 
+factual
+ 
+retention and using the abstractive model to ensure fluency.
+Transformer Models: The introduction of the 
+Transformer architecture marked a significant shift in the field of NLP. Vaswani
+ 
+et
+ 
+al.
+ 
+(2017)
+ 
+came
+ 
+up
+ 
+with
+ 
+the
+ 
+idea
+ 
+of
+ 
+attention,
+ 
+which enables
+ 
+the
+ 
+model
+ 
+to
+ 
+assign
+ 
+weights
+ 
+to
+ 
+critical
+ 
+and
+ 
+non-critical words in a sequence. For summarization, ByteBrief uses pre- trained Hugging Face models built on this architecture.
+Sentiment Analysis: The sentiment of news is also 
+crucial. Pardasani
+ 
+et
+ 
+al.
+ 
+(2018)
+ 
+worked
+ 
+on
+ 
+AI-driven
+ 
+communica- tion tools, stressing the need to be context-aware. In news, sentiment analysis help the market reactions by the users (negative
+ 
+sentiment
+ 
+in
+ 
+financial
+ 
+newsexample).
+ 
+For
+ 
+sentiment, a Positive/Neutral/Negative tag is assigned to each article allowing filtering according to mood or impact.
+Personalization
+ 
+and
+ 
+Recommender
+ 
+Systems
+Delivering the right news item to the right user is 
+the responsibility of a recommendation engine.
+Content-Based Filtering: The recommendations from 
+this approach
+ 
+contains
+ 
+items
+ 
+that
+ 
+are
+ 
+similar
+ 
+to
+ 
+the
+ 
+items
+ 
+that
+ 
+a
+ 
+user liked before. Felix et al., 2022) presented a smart personal AI assistant
+ 
+where
+ 
+the
+ 
+user’s
+ 
+profile
+ 
+proved
+ 
+to
+ 
+be
+ 
+paramount
+ 
+[8].
+On the level of categories (e.g., Tech vs. Sports), ByteBrief 
+is realized through a content-based filtering model.
+Collaborative
+ 
+Filtering:
+ 
+It
+ 
+is
+ 
+based
+ 
+on
+ 
+the
+ 
+notion
+ 
+of
+ 
+similarity between
+ 
+users.
+ 
+However,
+ 
+this
+ 
+approach
+ 
+has
+ 
+a
+ 
+cold
+ 
+start
+ 
+problem for
+ 
+new
+ 
+users.
+ 
+To
+ 
+solve
+ 
+this,
+ 
+a
+ 
+hybrid
+ 
+recommender
+ 
+system is used that utilises content-based metrics combined with trending global topics for new users to enable steering of content until there is sufficient learning for such a user.
+Context-Aware Recommendations: Latest studies 
+(2023) hold
+ 
+that
+ 
+time
+ 
+of
+ 
+the
+ 
+day
+ 
+as
+ 
+well
+ 
+as
+ 
+location
+ 
+play
+ 
+a
+ 
+great role in the relevance of the news. For instance, financial news is contextually essential during the market hours. The generic architecture of ByteBrief is thus aimed at factoring in these context-aware signals in its subsequent iterations.
+Limitations
+ 
+of
+ 
+Current
+ 
+Systems
+While progress has been made, current solutions still 
+have many shortcomings: Monolithic Architecture: A number of current aggregators use monolithic backend architectures that make it very difficult to scale. ByteBrief has a modular architecture
+ 
+built
+ 
+using
+ 
+Django
+ 
+so
+ 
+that
+ 
+its
+ 
+scraping
+ 
+and
+ 
+analysis modules can be scaled independently from each other.
+Lack of Transparency: Users frequently do not 
+understand the
+ 
+reason
+ 
+for
+ 
+a
+ 
+specific
+ 
+article
+ 
+being
+ 
+recommended.
+ 
+ByteBrief seeks to improve explainability by tagging all recommended articles with metadata that explains the reason for the recom- mendation (e.g., “Because you read 3 articles about Technol- ogy yesterday”).
+Silolization: The majority of aggregation applications 
+pro- vide either text or video functionality. ByteBrief focuses on maximizing text digest efficiency, but is designed to allow for the embedding of multimedia in the future.
+Theoretical
+ 
+Framework
+Theoretical foundations of the ByteBrief methodology 
+are grounded on the Information Processing Theory which states that human cognition is limited in its ability to process infor- mation.
+ 
+The
+ 
+“processing”
+ 
+functions
+ 
+(reading
+ 
+and
+ 
+synthesising) will be performed by the AI so that the human’s “decision” function will be optimised. To help with the user interface design, the Technology Acceptance Model (TAM) will be employed to ensure that perceived usefulness and ease of use are maximised to enhance user adoption [9].
+Summary
+ 
+of
+ 
+Literature
+The literature reviewed confirms that while there are 
+com- ponents of ByteBrief (scraping, NLP, recommendation) that exist independently there is no formal integration of these components into an agent-based system. The major differenti- ation between the system and others available is the transition from passive aggregation to active intelligence generation. In the following sections we will outline how the theoretical foundations have been applied to the design of the ByteBrief 
+system.
+DESIGN
+ 
+OF
+ 
+SYSTEM
+The ByteBrief system architecture was designed for a 
+high- volume of data input, complex natural language processing, and realtime usage by users. The system architecture follows the
+ 
+Model-View-Template
+ 
+(MVT)
+ 
+architecture
+ 
+pattern
+ 
+defined in Django. This ensures a very clear separation between Data Logic, the User Interface, and Control Flow. The architecture is modular, allowing any one of the individual components (Scraper, Analysis, Front End) to be scaled independently or replaced
+ 
+independently
+ 
+of
+ 
+the
+ 
+other
+ 
+modules,
+ 
+so
+ 
+as
+ 
+not
+ 
+to
+ 
+affect the integrity of the overall system.
+Fig.
+ 
+1.
+ 
+System
+ 
+Design
+An
+ 
+Overview
+ 
+of
+ 
+the
+ 
+Modular
+ 
+Architecture
+he system is composed of three primary layers: The 
+Data Ingestion Layer, The Intelligence Processing Layer, and The Presentation Layer. This separation allows for the heavy com- puting tasks (e.g., NLP and scraping) not to affect the user interface and therefore keeps the overall system responsive
+ 
+for users.
+Data
+ 
+Ingestion
+ 
+Layer
+ 
+This
+ 
+layer
+ 
+acquires
+ 
+raw
+ 
+data from multiple sources in the news industry. It uses a distributed scraping engine, so it can scrape different types
+ 
+of
+ 
+data
+ 
+(RSS
+ 
+feeds,
+ 
+JSON
+ 
+APIs,
+ 
+and
+ 
+HTML). The scraping engine has a Rate Limiter to ensure that ethical
+ 
+scraping
+ 
+is
+ 
+performed.
+ 
+This
+ 
+includes
+ 
+scraping in accordance with the robots.txt file of the website being
+ 
+scraped.
+ 
+Immediately
+ 
+after
+ 
+a
+ 
+piece
+ 
+of
+ 
+raw
+ 
+text is ingested, a Deduplication Engine runs to prevent redundant storage. This step is important because more than one news outlet may publish information related to the same incident; the only difference is in the title of
+ 
+the article.
+Intelligence Processing Layer Preprocessing Preprocesses
+ 
+tokens,
+ 
+removes
+ 
+stop
+ 
+words
+ 
+(if
+ 
+applicable), and lemmatizes the tokens.
+Summarization
+ 
+Uses
+ 
+transformer
+ 
+models
+ 
+to
+ 
+produce summarized digests of the articles.
+Sentiment
+ 
+Analysis
+ 
+Gives
+ 
+each
+ 
+article
+ 
+a
+ 
+polarity
+ 
+score.
+Categorization Categorizes articles using a Naive 
+Bayes or deep learning classifier into the following categories: Tech, Business, and Sports.
+Presentation
+ 
+Layer
+This layer of ByteBrief uses React.js and connects 
+to
+ 
+the data created by the Intelligence Processing Layer through
+ 
+RESTful
+ 
+API
+ 
+calls/requests
+ 
+made
+ 
+to
+ 
+the
+ 
+Django backend. This layer of the application locally maintains state
+ 
+using
+ 
+Redux
+ 
+or
+ 
+the
+ 
+Context
+ 
+API
+ 
+to
+ 
+provide
+ 
+a
+ 
+seam- less user experience (no need for constant calls to the backend; users navigate freely within the application). Additionally, the Presentation Layer manages all user authentication and preferences.
+Database
+ 
+Schema
+ 
+Design
+The MongoDB database schema consists of four 
+primary collections as shown in Table I:
+TABLE
+ 
+I
+MongoDB
+ 
+Database
+ 
+Schema
+ 
+Collections
+Articles
+id,
+ 
+headline,
+ 
+body,
+ 
+source
+ 
+url,
+ 
+published
+ 
+at,
+ 
+summary,
+ 
+sentiment
+ObjectId,
+ 
+String,
+ 
+Date,
+ 
+Float
+Core
+ 
+collection
+ 
+storing
+ 
+raw
+ 
+and
+processed
+ 
+news
+ 
+content.
+Sources
+id,
+ 
+name,
+ 
+domain,
+ 
+reliability
+ 
+score
+ObjectId,
+ 
+String,
+ 
+Float
+Metadata
+ 
+about
+ 
+the
+ 
+news
+ 
+outlet
+(e.g.,
+ 
+BBC,
+ 
+CNN).
+Users
+id,
+ 
+username,
+ 
+email,
+ 
+password
+ 
+hash,
+ 
+preferences
+ObjectId,
+ 
+String,
+ 
+Array
+Authenticated
+ 
+user
+ 
+profiles
+ 
+and
+ 
+in-
+terest
+ 
+tags.
+Interactions
+id,
+ 
+user
+ 
+id,
+ 
+article
+ 
+id,
+ 
+action,
+ 
+timestamp
+ObjectId,
+ 
+ObjectId,
+ 
+String,
+ 
+Date
+Tracks
+ 
+clicks,
+ 
+reads,
+ 
+and
+ 
+skips
+ 
+for
+ML
+ 
+training.
+Articles
+id,
+ 
+headline,
+ 
+body,
+ 
+source
+ 
+url,
+ 
+published
+ 
+at,
+ 
+summary,
+ 
+sentiment
+ObjectId,
+ 
+String,
+ 
+Date,
+ 
+Float
+Core
+ 
+collection
+ 
+storing
+ 
+raw
+ 
+and
+processed
+ 
+news
+ 
+content.
+Sources
+id,
+ 
+name,
+ 
+domain,
+ 
+reliability
+ 
+score
+ObjectId,
+ 
+String,
+ 
+Float
+Metadata
+ 
+about
+ 
+the
+ 
+news
+ 
+outlet
+(e.g.,
+ 
+BBC,
+ 
+CNN).
+Users
+id,
+ 
+username,
+ 
+email,
+ 
+password
+ 
+hash,
+ 
+preferences
+ObjectId,
+ 
+String,
+ 
+Array
+Authenticated
+ 
+user
+ 
+profiles
+ 
+and
+ 
+in-
+terest
+ 
+tags.
+Interactions
+id,
+ 
+user
+ 
+id,
+ 
+article
+ 
+id,
+ 
+action,
+ 
+timestamp
+ObjectId,
+ 
+ObjectId,
+ 
+String,
+ 
+Date
+Tracks
+ 
+clicks,
+ 
+reads,
+ 
+and
+ 
+skips
+ 
+for
+ML
+ 
+training.
+Collection
+ 
+Name
+  
+Fields
+Data
+ 
+Type
+Description
+Collection
+ 
+Descriptions:
+Articles: 
+This is the core collection that stores both 
+raw and processed news content. Each article document con- tains
+ 
+the
+ 
+headline,
+ 
+full
+ 
+body
+ 
+text,
+ 
+source
+ 
+URL,
+ 
+publication date, generated summary, and sentiment analysis score.
+Sources: 
+Contains metadata about news outlets such 
+as BBC, CNN, etc. Each source document includes the outlet name, domain, and a reliability score used for content filtering and ranking.
+Users: 
+Stores authenticated user profiles including 
+user- name, email, hashed password, and user preferences represented as an array of interest tags for personalized content delivery.
+Interactions: 
+Tracks user engagement metrics 
+including clicks, reads, and skips. This collection is essential for machine learning model training and improving recom- mendation algorithms.
+Security
+ 
+Design
+The design of the system incorporates security at all 
+levels 
+including:
+Authentication: 
+Uses JSON Web Tokens (JWT) 
+for stateless
+ 
+authentication
+ 
+with
+ 
+a
+ 
+set
+ 
+duration
+ 
+indicating an expiration time that reduces exposure to session 
+hijacking.
+Input Validation: 
+Uses Django’s ORM input 
+sanitiza- tion methods to avoid SQL Injection and prevent XSS using standard React component escaping methods.
+Rate
+ 
+Limiting:
+ 
+Enforced
+ 
+on
+ 
+all
+ 
+API
+ 
+endpoints;
+ 
+therefore there is a limit on the number of requests made to that endpoint over a period to mitigate the risk of Denial of Service (DoS) attacks.
+Data Encryption: 
+Data is encrypted using 
+PBKDF2 hashing combined with salt for all sensitive user data (including passwords). SSL/TLS are used to encrypt database connections for production environments.
+Collection
+ 
+Descriptions:
+Articles
+: This is the core collection that stores both raw and processed news content. Each article document 
+con- tains
+ 
+the
+ 
+headline,
+ 
+full
+ 
+body
+ 
+text,
+ 
+source
+ 
+URL,
+ 
+publication date, generated summary, and sentiment analysis score.
+Sources
+: Contains metadata about news outlets such 
+as BBC, CNN, etc. Each source document includes the outlet name, domain, and a reliability score used for content filtering and ranking.
+Users
+: Stores authenticated user profiles including 
+user- name, email, hashed password, and user preferences represented as an array of interest tags for personalized content delivery.
+Interactions
+: Tracks user engagement metrics 
+including clicks, reads, and skips. This collection is essential for machine learning model training and improving recom- mendation algorithms.
+Component
+ 
+Interaction
+ 
+Flow
+ystem components interact using an asynchronous 
+request and response method. Below is an outline of how the interac- tion will occur when a user requests a digest.
+When a user requests a digest via React’s front-end, a GET request (to the Django API Endpoint, /api/digest/) 
+will
+ 
+be made by the front-end.
+The Django API’s View will collect from the 
+database Articles that match user preferences.
+If real time data is needed, the View will fire the Celery Task Queue to retrieve the latest news from the 
+Scraper 
+process.
+The Scraper process will execute, will save the data 
+to the database, then return with an acknowledgment of success.
+The API will serialize the data for use by the front 
+end
+ 
+(in JSON format) and return that data to the front end.
+The
+ 
+Frontend
+ 
+will
+ 
+render
+ 
+the
+ 
+Articles
+ 
+using
+ 
+TailwindCSS. This
+ 
+flow
+ 
+of
+ 
+interaction
+ 
+allows
+ 
+the
+ 
+User
+ 
+Interface
+ 
+(i.e.,
+ 
+UI) to be asynchronous so it does not block the User. All long- running tasks, such as Scraping Articles and Summarizing Articles are performed by background processes to minimize timeout errors that may happen when the User Interface will be under high load.
+Security
+ 
+Design
+he design of the system incorporates security at all 
+levels including A) Authentication which includes the use of JSON Web Tokens (JWT) for stateless authentication with a set duration
+ 
+indicating
+ 
+an
+ 
+expiration
+ 
+time
+ 
+that
+ 
+reduces
+ 
+exposure
+ 
+to session
+ 
+hijacking
+ 
+and
+ 
+B)
+ 
+Input
+ 
+Validation
+ 
+with
+ 
+use
+ 
+of
+ 
+Django’s ORM input sanitization methods to avoid SQL Injection and prevent XSS using standard React component escaping meth- ods. Rate Limiting is enforced on all API endpoints; therefore there
+ 
+is
+ 
+a
+ 
+limit
+ 
+on
+ 
+the
+ 
+number
+ 
+of
+ 
+requests
+ 
+made
+ 
+to
+ 
+that
+ 
+endpoint
+over a period to mitigate the risk of Denial of Service 
+(DoS) attacks. Data is encrypted using PBKDF2 hashing combined with
+ 
+salt
+ 
+for
+ 
+all
+ 
+sensitive user
+ 
+data
+ 
+(including
+ 
+passwords).
+ 
+SSL
+/ TLS are used to encrypt database connections for 
+production 
+environments.
+The design of the system incorporates security at all 
+levels including A) Authentication which includes the use of JSON Web Tokens (JWT) for stateless authentication with a set duration
+ 
+indicating
+ 
+an
+ 
+expiration
+ 
+time
+ 
+that
+ 
+reduces
+ 
+exposure
+ 
+to session
+ 
+hijacking
+ 
+and
+ 
+B)
+ 
+Input
+ 
+Validation
+ 
+with
+ 
+use
+ 
+of
+ 
+Django’s ORM input sanitization methods to avoid SQL Injection and prevent XSS using standard React component escaping meth- ods. Rate Limiting is enforced on all API endpoints; therefore there
+ 
+is
+ 
+a
+ 
+limit
+ 
+on
+ 
+the
+ 
+number
+ 
+of
+ 
+requests
+ 
+made
+ 
+to
+ 
+that
+ 
+endpoint over a period to mitigate the risk of Denial of Service (DoS) attacks. Data is encrypted using PBKDF2 hashing combined with
+ 
+salt
+ 
+for
+ 
+all
+ 
+sensitive user
+ 
+data
+ 
+(including
+ 
+passwords).
+ 
+SSL
+/ TLS are used to encrypt database connections for 
+production 
+environments.
+ARCHITECTURE
+ 
+DIAGRAM
+The architecture of the system has been designed in 
+ac- cordance with a Layered Architecture Pattern that provides a means for maintainability and testability. The Architecture is illustrated in Figure 2
+Fig.
+ 
+2.
+ 
+Architecture
+ 
+Diagram
+The
+ 
+architecture
+ 
+consists
+ 
+of
+ 
+four
+ 
+distinct
+ 
+layers:
+Client
+ 
+Layer
+The Client Layer consists of the users web browser or 
+mo- bile device which contains the React single-page application (SPA). Functions for rendering the user interface, managing local state and handling user events e.g., clicking on an article or adjusting a preferences slider are handled within the Client Layer. Communication with the backend is exclusively via HTTPS APIs.
+API
+ 
+Gateway
+ 
+layer
+The core processing layer is hosted on the Django 
+backend and
+ 
+contains
+ 
+service
+ 
+classes
+ 
+that
+ 
+perform
+ 
+the
+ 
+orchestration of the flow of data. For example, the News Service class orchestrates the operation of the Scraper Module and the Summarization Module. The Core Processing Layer executes the same algorithms as those outlined in the Methodology section. The Core Processing Layer is stateless, allowing multiple instances of the Core Processing Layer to run behind a load balancer for the purpose of increasing scalabiliy
+Business
+ 
+Logic
+ 
+Layer:
+The
+ 
+Data
+ 
+Layer
+ 
+is
+ 
+designed
+ 
+to
+ 
+abstract
+ 
+all
+ 
+data
+ 
+access and interactions. The Data Layer will utilize Django ORM (Object Relationship Mapper) to convert Python objects to SQL queries. Therefore, once complete, the Data Layer may be moved from SQLite to PostgreSQL or MySQL (database agnostic) with very minimal changes to code (only a few
+ 
+lines
+ 
+of
+ 
+code)
+ 
+and
+ 
+will
+ 
+manage
+ 
+connection
+ 
+pooling
+ 
+for
+ 
+optimal database performance.
+Data
+ 
+Access
+ 
+Layer
+The
+ 
+Data
+ 
+Layer
+ 
+is
+ 
+designed
+ 
+to
+ 
+abstract
+ 
+all
+ 
+data
+ 
+access and interactions. The Data Layer will utilize Django ORM (Object Relationship Mapper) to convert Python objects to SQL queries. Therefore, once complete, the Data Layer may be moved from SQLite to PostgreSQL or MySQL (database agnostic) with very minimal changes to code (only a few
+ 
+lines
+ 
+of
+ 
+code)
+ 
+and
+ 
+will
+ 
+manage
+ 
+connection
+ 
+pooling
+ 
+for
+ 
+optimal database performance.
+Layer
+ 
+Of
+ 
+External
+ 
+Services
+There are a number of external services that are connected to ByteBrief:
+News
+ 
+Sources
+ 
+-
+ 
+External
+ 
+URLs
+ 
+that
+ 
+are
+ 
+fetched
+ 
+from
+ 
+using HTTP requests.
+-NLP Models - Hugging Face Inference API or 
+local transformer models based on the framework.
+-Cloud The two most commonly used services for 
+storing both article image files and other static assets are Amazon’s AWS S3 and Google’s cloud storage.
+Redis is an example of a message broker for Celery distributed task queues.
+Data
+ 
+Flow
+ 
+Diagram
+ 
+(DFD)
+Fig.
+ 
+3.
+ 
+Data
+ 
+Flow
+ 
+Diagram
+The Data Flow Diagram illustrates how information 
+moves through the system. Level 0 DFD: Shows the system as a single
+ 
+process
+ 
+interacting
+ 
+with
+ 
+Users
+ 
+and
+ 
+News
+ 
+Sources.
+ 
+Level 1 DFD: Breaks down the system into Scraping, Processing, and Delivery processes. Data Store: Indicates where data rests (Database, Cache).
+METHODOLOGY
+Before any analysis can be performed, raw text data 
+must
+ 
+be converted into a numerical format that machine learning models
+ 
+can
+ 
+understand.
+ 
+We
+ 
+employ
+ 
+TF-IDF
+ 
+(Term
+ 
+Frequency- Inverse Document Frequency) for initial feature extraction.
+Term
+ 
+Frequency
+ 
+(TF)
+ 
+measures
+ 
+how
+ 
+frequently
+ 
+a
+ 
+term
+ 
+t
+appears
+ 
+in
+ 
+a
+ 
+document
+ 
+d
+:
+count
+ 
+of
+ 
+term
+ 
+t
+ 
+in
+ 
+document
+ 
+d
+Where dk is the dimension of the key vectors, used 
+for scaling to prevent gradient vanishing. This allows the model
+ 
+to focus on relevant parts of the article when generating each word of the summary.
+C.
+ 
+Sentiment
+ 
+Analysis
+ 
+Scoring
+Sentiment analysis is performed using a pre-trained 
+Deep Learning
+ 
+model
+ 
+(e.g.,
+ 
+RoBERTa)
+ 
+fine-tuned
+ 
+on
+ 
+news
+ 
+sentiment datasets.
+ 
+The
+ 
+output
+ 
+is
+ 
+a
+ 
+probability
+ 
+distribution
+ 
+over
+ 
+three
+TF
+ 
+(
+t,
+ 
+d
+)
+ 
+=
+total
+ 
+terms
+ 
+in
+ 
+document
+ 
+d
+(1)
+classes:
+ 
+Positive
+ 
+(P),
+ 
+Neutral
+ 
+(N),
+ 
+and
+ 
+Negative
+ 
+(Neg).
+ 
+The
+Inverse
+ 
+Document
+ 
+Frequency
+ 
+(IDF)
+ 
+measures
+ 
+how
+ 
+impor- tant a term is across the entire corpus 
+D
+:
+ 
+ 
+ 
+ 
+IDF
+ 
+(
+t,
+ 
+D
+)
+ 
+=
+ 
+log
+total
+ 
+documents
+ 
+in
+ 
+corpus
+(2)
+documents
+ 
+containing
+ 
+t
+The
+ 
+final
+ 
+TF–IDF
+ 
+score
+ 
+is
+ 
+the
+ 
+product
+ 
+of
+ 
+TF
+ 
+and
+ 
+IDF:
+TFIDF
+ 
+(
+t,
+ 
+d,
+ 
+D
+)
+ 
+=
+ 
+TF
+ 
+(
+t,
+ 
+d
+)
+ 
+×
+ 
+IDF
+ 
+(
+t,
+ 
+D
+)
+(3)
+This weighting scheme ensures that common words 
+(e.g., ”the”, ”is”) are downweighted, while distinctive keywords (e.g., ”inflation”, ”launch”) are highlighted, aiding in better categorization and search relevance.
+A.
+ 
+Semantic
+ 
+Similarity
+ 
+and
+ 
+Duplicate
+ 
+Detection
+To prevent users from seeing the same news story 
+from multiple sources, ByteBrief implements a Semantic Similarity Check. We use Cosine Similarity to measure the similarity between two document vectors A and B
+Sentiment
+ 
+Score
+ 
+(S)
+ 
+is
+ 
+calculated
+ 
+as
+ 
+a
+ 
+weighted
+ 
+sum:
+S
+ 
+=
+ 
+(1
+ 
+×
+ 
+P
+pos
+)
+ 
++
+ 
+(0
+ 
+×
+ 
+P
+neu
+)
+ 
++
+ 
+(
+−
+1
+ 
+×
+ 
+P
+neg
+)
+(7)
+—
+—
+where
+ 
+P
+pos
+,
+ 
+P
+neu
+,
+ and
+ 
+P
+neg
+ are
+ the
+ predicted
+ probabilities for each class. The sentiment score 
+S
+ 
+ranges from
+ 
+1
+ 
+(Very Negative) to 
++1
+ 
+(Very Positive).
+This score is stored in the database and used to filter 
+news based
+ 
+on
+ 
+user
+ 
+mood
+ 
+preferences
+ 
+(e.g.,
+ 
+“Show
+ 
+me
+ 
+only
+ 
+positive 
+news”).
+E.
+ 
+Personalization
+ 
+Ranking
+ 
+Algorithm
+To personalize the news feed, a 
+Content-Based 
+Filtering 
+algorithm is implemented. Each user 
+u
+ 
+has a preference
+ 
+vector 
+U 
+derived from their reading history. Each article 
+i
+ 
+is represented by a feature vector 
+I 
+based on its category, tags, and named entities.
+The
+ 
+Relevance
+ 
+Score
+ 
+(
+R
+)
+ 
+of
+ 
+an
+ 
+article
+ 
+i
+ 
+for
+ 
+a
+ 
+specific
+ 
+user
+u
+ 
+is
+ 
+defined
+ 
+as:
+R
+(
+u,
+ 
+i
+)
+ 
+=
+ 
+αS
+(
+U,
+ 
+I
+)
+ 
++
+ 
+βR
+(
+t
+i
+)
+ 
++
+ 
+γP
+ 
+(
+i
+)
+(8)
+Similarity
+(
+A,
+ 
+B
+)
+ 
+=
+ 
+  
+A
+ 
+·
+ 
+B
+ 
+||
+A
+||
+ 
+||
+B
+||
+(4)
+where:
+Where: AB: dot product of vectors A and B A,B: 
+Euclidean norms n: number of dimensions
+If the similarity score exceeds a threshold (e.g.,=0.85), 
+the new article is flagged as a duplicate and merged with the existing
+ 
+record,
+ 
+retaining
+ 
+the
+ 
+source
+ 
+with
+ 
+the
+ 
+highest
+ 
+reliability 
+score.
+B.
+ 
+Abstractive
+ 
+Summarization
+ 
+Algorithm
+ByteBrief utilizes a Transformer-based Encoder-
+Decoder architecture (specifically fine-tuned BART or T5 models)for abstractive summarization. The model learns to map an input sequence X=(x1,x2,...,xn) to an output summary sequence Y=(y1,y2,...,ym). The probability of generating the summary is modeled as:
+Y
+Y
+m
+α
+,
+ 
+β
+,
+ and
+ 
+γ
+ 
+are
+ hyperparameters
+ tuned
+ using
+ grid search(e.g., 
+α 
+= 
+0
+.
+5
+, 
+β 
+= 
+0
+.
+3
+, 
+γ 
+= 
+0
+.
+2
+).
+S
+ 
+is
+ 
+Similarity,
+ 
+R
+ 
+is
+ 
+Recency,
+ 
+P
+ 
+is
+ 
+Popularity.
+Recency
+(
+t
+i
+)
+ 
+is
+ 
+a
+ 
+decay
+ 
+function
+ 
+based
+ 
+on
+ 
+the
+ 
+publication time 
+t
+i
+ 
+of the article.
+Popularity
+(
+i
+) 
+represents the global click-through rate 
+of the article.
+This ranking function ensures that the news feed is 
+not
+ 
+only relevant to the user’s interests but also fresh and socially 
+validated.
+D.
+ 
+Evaluation
+ 
+Metrics
+To evaluate the quality of the generated summaries, we 
+use ROUGE (Recall-Oriented Understudy for Gisting Evaluation) scores. Specifically, ROUGE-N measures the overlap of n- grams
+ 
+between the system
+ 
+summary and reference
+ 
+summaries.
+P
+ 
+(
+Y
+ 
+|
+X
+)
+ 
+=
+P
+ 
+(
+y
+t
+|
+y
+1:
+t
+−
+1
+,
+ 
+X
+)
+(5)
+t
+=1
+ROUGE-
+N
+Σ
+S
+∈
+R
+Σ
+g
+n
+∈
+S
+Count
+match
+(
+g
+n
+)
+(9)
+The
+ 
+model
+ 
+uses
+ 
+Self-Attention
+ 
+Mechanisms
+ 
+to
+ 
+weigh
+ 
+the
+=
+Σ
+Σ
+S
+∈
+R
+Σ
+g
+n
+∈
+S
+Count
+(
+g
+n
+)
+importance
+ 
+of
+ 
+different
+ 
+words
+ 
+in
+ 
+the
+ 
+input
+ 
+sequence.
+ 
+The attention
+ 
+score
+ 
+for
+ 
+a
+ 
+query
+ 
+Q,
+ 
+key
+ 
+K,
+ 
+and
+ 
+value
+ 
+V
+ 
+is
+ 
+calculated
+as:
+Additionally,
+ 
+BLEU
+ 
+(Bilingual
+ 
+Evaluation
+ 
+Understudy)
+ 
+is
+ 
+used to measure precision:
+Attention
+(
+Q,
+ 
+K,
+ 
+V
+ 
+) = 
+softmax
+QK
+T
+ 
+ 
+ 
+ 
+√
+√
+ 
+ 
+d
+k
+V
+(6)
+BLEU
+ 
+=
+ 
+BP
+ 
+·
+ 
+exp
+N
+ 
+Σ
+ 
+Σ
+n
+=1
+w
+n
+ 
+log
+ 
+p
+n
+!
+(10)
+where
+ 
+BP
+ 
+is
+ 
+the
+ 
+brevity
+ 
+penalty
+ 
+and
+ 
+p
+n
+ 
+denotes
+ 
+the
+ 
+precision of 
+n
+-grams. These metrics provide a quantitative basis for discussing system performance in Section VII.
+Implementation
+The implementation phase translates the designed 
+architec- ture and methodology into a functional software product. This section
+ 
+details
+ 
+the
+ 
+technology
+ 
+stack,
+ 
+development
+ 
+environment, key code structures, and integration strategies.
+Technology
+ 
+Stack
+ Justification
+Backend (Django & Python 3.12): 
+Django was 
+chosen over Flask (used in the model paper) due to its “batteries- included” philosophy. It provides built-in authentication, an ORM, and an admin panel, which accelerates development. Python
+ 
+3.12
+ 
+offers
+ 
+performance
+ 
+improvements
+ 
+crucial
+ 
+for
+ 
+data processing tasks.
+Frontend
+ 
+(React
+ 
+&
+ 
+TailwindCSS):
+ 
+React’s
+ 
+component- based
+ 
+architecture
+ 
+allows
+ 
+for
+ 
+reusable
+ 
+UI
+ 
+elements
+ 
+(e.g.,
+ 
+News Cards,
+ 
+Navbars).
+ 
+TailwindCSS
+ 
+enables
+ 
+rapid
+ 
+styling
+ 
+without writing
+ 
+custom
+ 
+CSS
+ 
+files,
+ 
+ensuring
+ 
+a
+ 
+consistent
+ 
+design
+ 
+system. 
+Database
+ 
+(SQLite/PostgreSQL):
+ 
+SQLite
+ 
+is
+ 
+used
+ 
+for
+ 
+de- velopment due to its zero-configuration setup. The schema is compatible
+ 
+with
+ 
+PostgreSQL
+ 
+for
+ 
+production,
+ 
+ensuring
+ 
+scala-
+bility.
+Package
+ 
+Manager
+ 
+(uv):
+ 
+We
+ 
+utilize
+ 
+uv,
+ 
+a
+ 
+high-
+performance Python package installer, to manage dependencies. It offers significantly faster resolution and installation times compared to pip, improving developer workflow efficiency.
+Core
+ 
+Module
+ 
+Implementation
+News Scraper Module: 
+The scraper is 
+implemented
+ 
+using
+ 
+Python’s
+ 
+requests
+ 
+and
+ 
+BeautifulSoup
+ 
+libraries.
+ 
+It
+ 
+respects robots.txt and implements exponential backoff for retries.
+Summarization Service: 
+The summarization service 
+in- terfaces with Hugging Face’s transformers library. It loads a pre-trained model into memory to avoid reloading costs for every request.
+Django API Views: 
+The backend exposes REST 
+end- points using Django Rest Framework. These endpoints handle authentication and data serialization.
+Challenge: Model Latency. Solution: 
+Implemented caching using Redis. If an article has already been summa- rized, the cached summary is served instead of re-running the 
+model.
+E.
+ 
+Testing
+ 
+Strategy
+Unit
+ 
+Testing:
+ 
+Used
+ 
+pytest
+ 
+for
+ 
+backend
+ 
+logic
+ 
+and
+ 
+Jest
+ 
+for frontend components.
+Integration
+ 
+Testing:
+ 
+Verified
+ 
+API
+ 
+endpoints
+ 
+using
+ 
+Postman 
+collections.
+User
+ 
+Acceptance
+ 
+Testing
+ 
+(UAT):
+ 
+A
+ 
+beta
+ 
+group
+ 
+of
+ 
+20
+ 
+users tested the system for usability and relevance feedback.
+RESULTS
+ 
+AND
+ 
+DISCUSSION
+This section presents the performance evaluation of 
+Byte- Brief. The system was tested on a dataset of 10,000 news ar- ticles collected over a period of 30 days. Performance metrics include Summarization Quality, System Latency, Duplicate Detection Accuracy, and User Satisfaction.
+Summarization
+ 
+Quality
+ 
+Evaluation
+We
+ 
+evaluated
+ 
+the
+ 
+summarization
+ 
+module
+ 
+using
+ 
+ROUGE- 1, ROUGE-2, and ROUGE-L scores against human-written summaries. Table III: ROUGE Scores Comparison
+TABLE
+ 
+II
+ROUGE
+ 
+Scores
+ 
+Comparison
+Model
+ROUGE-
+1
+ROUGE-
+2
+ROUGE-
+L
+Lead-3
+ 
+Baseline
+0.40
+0.18
+0.36
+TextRank
+ 
+(Extractive)
+0.45
+0.22
+0.41
+BART
+ 
+(ByteBrief)
+0.52
+0.28
+0.49
+Discussion: As shown in Table III, the BART 
+model integrated into ByteBrief outperforms traditional extractive methods (Lead-3, TextRank). The higher ROUGE-L score indicates better longitudinal sentence structure, making the summaries more readable. /
+Duplicate
+ 
+Detection
+ 
+Accuracy
+The
+ 
+cosine
+ 
+similarity-based
+ 
+deduplication
+ 
+module
+ 
+was tested on a set of 500 known duplicate pairs.
+True
+ 
+Positives:
+ 
+485
+ 
+False
+ 
+Positives:
+ 
+10
+ 
+False
+ 
+Negatives:
+ 
+5
+485
+485
+Frontend
+ 
+Integration
+The React frontend consumes the API using axios. 
+State management
+ 
+is
+ 
+handled
+ 
+via
+ 
+React
+ 
+Hooks
+ 
+(useState,
+ 
+useEffect).
+Development
+ 
+Challenges
+ 
+and
+ 
+Solutions
+Challenge: Blocking I/O during Scraping. 
+Solution: 
+Implemented asynchronous tasks using Celery and Redis. Scraping jobs are queued, allowing the web server to remain 
+responsive.
+Challenge: Inconsistent HTML Structures. 
+Solution: 
+Developed a modular parser system where each news source has
+ 
+a
+ 
+specific
+ 
+configuration
+ 
+file
+ 
+defining
+ 
+selectors
+ 
+for
+ 
+headlines and body text.
+Precision
+ 
+=
+ 
+485
+ 
++
+ 
+10
+ 
+=
+ 
+495
+ 
+≈
+ 
+0
+.
+98
+(11)
+ 
+485
+ 
+485
+Recall
+ 
+=
+ 
+485
+ 
++
+ 
+5
+ 
+=
+ 
+490
+ 
+≈
+ 
+0
+.
+99
+(12)
+The
+ 
+system
+ 
+achieves
+ 
+98
+System
+ 
+Latency
+ 
+and
+ 
+Performance
+Latency was measured under varying loads (number 
+of concurrent users). Table IV: API Response Time (ms)
+Discussion:
+ 
+The
+ 
+system
+ 
+maintains
+ 
+sub-200ms
+ 
+latency
+ 
+for
+ 
+up to 50 concurrent users, which is acceptable for a news reading application. For higher loads, horizontal scaling of the Django workers is recommended.
+TABLE
+ 
+III
+API
+ 
+Response
+ 
+Time
+ 
+(ms)
+Concurrent
+ 
+Users
+Average
+ 
+Latency
+ 
+(ms)
+95th
+ 
+Percentile
+ 
+(ms)
+10
+120
+150
+50
+145
+200
+100
+210
+350
+500
+450
+800
+User
+ 
+Satisfaction
+ 
+Survey
+A survey was conducted with 50 beta users. They rated 
+the system on a scale of 1 to 5.
+Ease
+ 
+of
+ 
+Use:
+ 
+4.6/5
+ 
+Summary
+ 
+Quality:
+ 
+4.3/5
+ 
+Relevance:
+ 
+4.5/5 Load Speed: 4.2/5
+Qualitative feedback indicated that users appreciated 
+the Sentiment Tags, as it allowed them to avoid distressing news during work hours.
+Comparative
+ 
+Discussion
+ 
+with
+ 
+Model
+ 
+Paper
+ByteBrief differs from the model paper (Image 
+Recognition Chat-Bot) in that the model paper is primarily concerned with multi-modal vision-language interactions while ByteBrief is about aggregating and intelligently processing text.
+Similarities include: Both products use AI models 
+(LLaVA vs. BART) to provide enhanced interaction with users on top of their traditional static content. Both use a web-based front- end (HTML/Flask vs. React/Django).
+Differences include: ByteBrief supports users at a 
+much higher data velocity (a live stream of news) versus the static nature of images uploaded in the original model paper. The database relationships that ByteBrief relies on for user pref- erences will, therefore, be much more complex than in the original model paper.
+Performance: ByteBrief’s latency in processing text is 
+gen- erally lower than the model paper’s latency for performing inference on images, resulting in the ability for ByteBrief to provide much faster updates in real time.
+Limitations
+Paywalled Content: The scraper cannot access content 
+be- hind hard paywalls (e.g., Wall Street Journal), limiting cov- erage of premium financial news. Sarcasm Detection: The sentiment analysis model occasionally misclassifies sarcastic headlines
+ 
+as
+ 
+positive.
+ 
+Resource
+ 
+Intensity:
+ 
+Running
+ 
+transformer models locally requires significant RAM (minimum 8GB), which may limit deployment on low-cost servers.
+FUTURE
+ 
+WORK
+Multi-Modal
+ 
+News
+ 
+Integration
+ByteBrief is now primarily focused on text content. In 
+the future, video and image analysis will also be added. Bytes would
+ 
+be
+ 
+able
+ 
+to
+ 
+provide
+ 
+a
+ 
+summary
+ 
+of
+ 
+a
+ 
+news
+ 
+video
+ 
+or
+ 
+extract text
+ 
+from
+ 
+infographics
+ 
+found
+ 
+in
+ 
+an
+ 
+article,
+ 
+thus
+ 
+providing
+ 
+users with a true multi-modal digest of information.
+Advanced
+ 
+Personalization
+ 
+with
+ 
+Reinforcement
+ 
+Learning
+ByteBrief currently relies on static weights for the 
+person- alization of news content to users. Moving forward, however, it intends to implement reinforcement learning (RL) that will allow the system to create the desired policy (i.e., system gen- erated menu of news articles). The user will receive adaptive menu recommendations through dynamic updates and use a reward system to gauge their behaviour while interacting with ByteBrief. As a result, the system will try to balance both short-term engagement with long-term retention.
+Fake
+ 
+News
+ 
+and
+ 
+Bias
+ 
+Mitigation
+One
+ 
+of
+ 
+the
+ 
+most
+ 
+important
+ 
+modules
+ 
+in
+ 
+the
+ 
+future
+ 
+will
+ 
+be automated fact-checking capabilities. ByteBrief could use APIs (such as Google Fact Check Tools or CrossCheck) to flag potentially misleading articles for users. Additionally, ByteBrief will assign a bias score to each source within our system
+ 
+based
+ 
+on
+ 
+its
+ 
+political
+ 
+affiliation
+ 
+so
+ 
+that
+ 
+users
+ 
+can
+ 
+ensure that they are exposing themselves to both sides of the debate (i.e., ”show me left- and right-leaning viewpoints on this 
+topic”).
+Voice
+ 
+and
+ 
+Audio
+ 
+Digests
+A Text To Speech (TTS) feature will also be 
+implemented to provide access to daily briefings while a user commutes.
+ 
+For example, through services such as Google Cloud TTS or AWS
+ 
+Polly,
+ 
+users
+ 
+can
+ 
+listen
+ 
+to
+ 
+audio
+ 
+created
+ 
+from
+ 
+their
+ 
+owned daily briefing summaries.
+Scalability
+ 
+to
+ 
+Microservices
+To serve a user population in the millions (via the 
+mono- lithic Django backend), we will reevaluate the application architecture of our backend and convert the monolith based system
+ 
+into
+ 
+microservices.
+ 
+Currently
+ 
+we
+ 
+anticipate
+ 
+that
+ 
+the
+ 
+fol- lowing microservices will be required: Scraper Microservice: This
+ 
+is
+ 
+responsible
+ 
+for
+ 
+data
+ 
+collection.
+ 
+NLP
+ 
+Microservice:
+ 
+This is used for heavy model inference. User Microservice: This manages user credentials and profiles.
+These microservices will communicate with each 
+other using gRPC or Kafka. This will allow each microservice to independently scale from a load perspective.
+Blockchain
+ 
+for
+ 
+Content
+ 
+Provenance
+Future versions may be enhanced by leveraging 
+blockchain technology to fight against deepfakes and misinformation by creating a verifiable audit trail for news articles to timestamp or timestamp and verify when and where the news article was originally published.
+Conclusion
+In
+ 
+this
+ 
+paper,
+ 
+we
+ 
+present
+ 
+ByteBrief,
+ 
+which
+ 
+is
+ 
+an
+ 
+ad- vanced AI-driven news aggregation and summary tool 
+that provides solutions for the problem of too much information. Using Natural Language Processing (NLP) techniques such
+ 
+as transformer-based summarisation and sentiment analysis, ByteBrief
+ 
+is
+ 
+able
+ 
+to
+ 
+take
+ 
+large
+ 
+amounts
+ 
+of
+ 
+unstructured
+ 
+data
+coming from news articles and create a personalised 
+digest. The backend of the system is built on Django and React framework
+ 
+allowing
+ 
+for
+ 
+it
+ 
+to
+ 
+be
+ 
+scalable,
+ 
+secure
+ 
+and
+ 
+provide a responsive user experience.
+The evaluation of ByteBrief shows that it provides 
+high- quality summarisation (ROUGE-L 0.49), efficient duplicate detection (98 percent accurate), and drastically reduces the time
+ 
+and
+ 
+effort
+ 
+required
+ 
+for
+ 
+users
+ 
+to
+ 
+consume
+ 
+news.
+ 
+The use of tailored AI agents provides users with domain-specific insights, while the modular architecture allows for future fea- tures
+ 
+such
+ 
+as
+ 
+multi-modal
+ 
+support
+ 
+and
+ 
+reinforcement
+ 
+learning- based personalisation.
+To conclude, we believe that ByteBrief is a major 
+improve- ment to HCI in the news domain by changing how users interact with news from passive consumption to active and in- telligent
+ 
+curation.
+ 
+With
+ 
+the
+ 
+exponential
+ 
+growth
+ 
+of
+ 
+information, tools like ByteBrief are critical for keeping a society informed while
+ 
+not
+ 
+diminishing
+ 
+mental
+ 
+wellbeing
+ 
+or
+ 
+productivity.
+ 
+Future work will focus on expanding language support, improving fact-checking capabilities, and optimising the service for edge devices to ensure all users worldwide have access to our ser- vice regardless of location and income/usability/accessibility 
+barriers.
+References
+A.
+ 
+Vaswani,
+ 
+N.
+ 
+Shazeer,
+ 
+N.
+ 
+Parmar,
+ 
+J.
+ 
+Uszkoreit,
+ 
+L.
+ 
+Jones,
+ 
+A.
+ 
+N.
+ 
+Gomez,
+L. Kaiser, and I. Polosukhin, “Attention is All You Need,” in 
+Advances
+ 
+in Neural Information Processing Systems
+, vol. 30, 2017.
+C. Raffel, N. Shazeer, A. Roberts, K. Lee, S. Narang, M. Matena, Y.
+ 
+Zhou, W. Li, and P. J. Liu, “Exploring the Limits of Transfer Learning
+ 
+with
+ 
+a
+ 
+Unified
+ 
+Text-to-Text
+ 
+Transformer,”
+ 
+Journal
+ 
+of
+ 
+Machine
+ 
+Learning
+ 
+Research
+, vol. 21, no. 140, pp. 1–67, 2020.
+Y. Liu, “Fine-tune BERT for Extractive 
+Summarization,”
+ 
+arXiv:1903.10318, 2019.
+F. Pedregosa, G. Varoquaux, A. Gramfort, V. Michel, V. Dubourg, et
+ 
+al., “Scikit-learn: Machine Learning in Python,” 
+Journal of Machine
+ 
+Learning Research
+, vol. 12, pp. 2825–2830, 2011.
+Django
+ 
+Software
+ 
+Foundation,
+ 
+“Django
+ 
+Documentation,”
+ 
+2023.
+ [Online].
+Available:
+ 
+https://docs.djangoproject.com
+Facebook
+ 
+AI,
+ 
+“Hugging
+ 
+Face Transformers,”
+ 
+2023.
+ 
+[Online].
+ 
+Available:
+ 
+https://huggingface.co/docs/transformers
+J. Devlin, M. Chang, K. Lee, and K. Toutanova, “BERT: Pre-training
+ 
+of Deep Bidirectional Transformers for Language Understanding,” 
+in
+ 
+Proceedings of NAACL-HLT
+, 2019.
+C. Y. Lin, “ROUGE: A Package for Automatic Evaluation of Sum-
+ 
+maries,” in 
+Text Summarization Branches Out
+, pp. 74–81, 2004.
+M. Lewis, Y. Liu, N. Goyal, et al., “BART: Denoising Sequence-to-
+ 
+Sequence Pre-training for Natural Language Generation, 
+Translation,
+ 
+and Comprehension,” in 
+Proceedings of ACL
+, 2020.
+T.
+ 
+Mikolov,
+ 
+I.
+ 
+Sutskever,
+ 
+K.
+ 
+Chen,
+ 
+G.
+ 
+Corrado,
+ 
+and
+ 
+J.
+ 
+Dean,
+ 
+“Distributed
+ 
+Representations of Words and Phrases and their Compositionality,” 
+in
+ 
+Advances in Neural Information Processing Systems
+, 2013.
+S. Ioffe and C. Szegedy, “Batch Normalization: Accelerating Deep
+ 
+Network
+ 
+Training
+ 
+by
+ 
+Reducing
+ 
+Internal
+ 
+Covariate
+ 
+Shift,”
+ 
+in
+ 
+Proceedings
+ 
+of ICML
+, 2015.
+D.
+ 
+P.
+ 
+Kingma
+ 
+and
+ 
+J.
+ 
+Ba,
+ 
+“Adam:
+ 
+A
+ 
+Method
+ 
+for
+ 
+Stochastic
+ 
+Optimization,”
+ 
+in 
+Proceedings of ICLR
+, 2015.

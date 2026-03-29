@@ -48,6 +48,20 @@ class AsyncUniversalScraper:
                     media_thumbnail = item.find('media:thumbnail')
                     image_url = media_thumbnail.get('url') if media_thumbnail else None
 
+                    # If no image in RSS, try scraping the actual article page for og:image
+                    if not image_url and url:
+                        try:
+                            # Use a short timeout so we don't hold up the entire scraper queue forever
+                            async with session.get(url, headers={'User-Agent': self.user_agent}, timeout=aiohttp.ClientTimeout(total=5)) as art_res:
+                                if art_res.status == 200:
+                                    art_html = await art_res.text()
+                                    art_soup = BeautifulSoup(art_html, 'html.parser')
+                                    og_image = art_soup.find("meta", property="og:image")
+                                    if og_image:
+                                        image_url = og_image.get("content")
+                        except Exception as img_err:
+                            logger.debug(f"Could not fetch og:image for {url}: {img_err}")
+
                     article = Article(
                         title=title,
                         content=content_text,

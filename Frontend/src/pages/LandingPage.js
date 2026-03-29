@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Brain, ArrowRight, Zap, Shield, Globe } from 'lucide-react';
 import { authService } from '../services/authService';
+import BrandSeal from '../components/common/BrandSeal';
 
 const LandingPage = () => {
     const isAuthenticated = authService.isAuthenticated();
@@ -16,14 +17,8 @@ const LandingPage = () => {
             </div>
 
             {/* Hero Content */}
-            <main className="relative z-10 pt-8 pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-                <div className="inline-flex items-center space-x-2 bg-gray-900/50 border border-gray-800 rounded-full px-4 py-1.5 mb-8">
-                    <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </span>
-                    <span className="text-sm text-gray-300">Live AI News Scraping</span>
-                </div>
+            <main className="relative z-10 pt-8 pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center flex flex-col items-center">
+                <BrandSeal scale={0.4} className="mb-8" rotating={true} />
 
                 <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6">
                     Smart News Digest for <br />

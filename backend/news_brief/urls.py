@@ -10,4 +10,5 @@ urlpatterns = [
     path('api/user/profile/', UserProfileView.as_view(), name='user_profile'),
     path('api/user/delete-account/', DeleteAccountView.as_view(), name='delete_account'),
     path('api/user/preferences/', views.user_preferences_api, name='user_preferences'),
+    path('api/user/bookmarks/', views.user_bookmarks_api, name='user_bookmarks'),
 ]

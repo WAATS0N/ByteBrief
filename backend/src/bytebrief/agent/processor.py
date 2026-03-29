@@ -27,54 +27,30 @@ def get_summarizer():
             
     return _summarizer if _summarizer != "failed" else None
 
-# Keyword map for auto-categorization
-CATEGORY_KEYWORDS = {
-    'Breaking': ['breaking', 'urgent', 'alert', 'developing', 'just in', 'flash'],
-    'Tech': [
-        'ai', 'artificial intelligence', 'software', 'apple', 'google', 'microsoft',
-        'meta', 'nvidia', 'chip', 'robot', 'cybersecurity', 'hardware', 'startup',
-        'programming', 'developer', 'smartphone', 'gadget', 'silicon', 'openai',
-        'chatgpt', 'machine learning', 'tech', 'technology',
-    ],
-    'Business': [
-        'economy', 'market', 'stock', 'trade', 'gdp', 'company', 'corporate',
-        'acquisition', 'merger', 'ipo', 'revenue', 'profit', 'startup', 'ceo',
-        'business', 'commerce', 'industry', 'manufacturing',
-    ],
-    'Global': [
-        'war', 'un ', 'united nations', 'treaty', 'summit', 'diplomat', 'nato',
-        'conflict', 'ceasefire', 'refugee', 'sanction', 'invasion', 'global',
-        'international', 'foreign', 'world news', 'ukraine', 'middle east',
-    ],
-    'Health': [
-        'vaccine', 'cancer', 'fda', 'hospital', 'mental health', 'drug', 'disease',
-        'medicine', 'pandemic', 'virus', 'outbreak', 'health', 'medical', 'surgery',
-        'patient', 'therapy', 'clinical', 'treatment',
-    ],
-    'Sports': [
-        'championship', 'league', 'goal', 'player', 'match', 'tournament', 'nba',
-        'nfl', 'fifa', 'cricket', 'tennis', 'olympics', 'athlete', 'coach', 'sport',
-        'game', 'score', 'season', 'transfer', 'football', 'basketball', 'baseball',
-    ],
-    'Politics': [
-        'election', 'president', 'senate', 'congress', 'vote', 'law', 'policy',
-        'government', 'democrat', 'republican', 'parliament', 'prime minister',
-        'white house', 'legislation', 'political', 'campaign', 'ballot',
-    ],
-    'Finance': [
-        'crypto', 'bitcoin', 'ethereum', 'bank', 'interest rate', 'inflation',
-        'investment', 'hedge fund', 'wall street', 'nasdaq', 'dow jones', 'finance',
-        'financial', 'currency', 'dollar', 'federal reserve', 'vc', 'venture capital',
-    ],
-    'Travel': [
-        'flight', 'tourism', 'airline', 'hotel', 'destination', 'travel', 'airport',
-        'visa', 'passport', 'vacation', 'cruise', 'resort', 'booking',
-    ],
-    'Gaming': [
-        'playstation', 'xbox', 'steam', 'nintendo', 'game release', 'esports',
-        'gaming', 'video game', 'indie game', 'gamer', 'twitch', 'streamer',
-    ],
-}
+_classifier = None
+
+def get_classifier():
+    global _classifier
+    if _classifier is None:
+        try:
+            from transformers import pipeline
+            logger.info("Loading ML Zero-Shot Classifier model for categorization...")
+            # We use a fast, distilled model for quick news classification
+            _classifier = pipeline("zero-shot-classification", model="valhalla/distilbart-mnli-12-3", device=-1)
+            logger.info("ML Classifier loaded successfully.")
+        except Exception as e:
+            logger.error(f"Failed to load ML classifier: {e}")
+            _classifier = "failed"
+            
+    return _classifier if _classifier != "failed" else None
+
+# The categories available in the frontend UI
+AVAILABLE_CATEGORIES = [
+    'Tech', 'Business', 'Global', 'Health', 'Sports',
+    'Politics', 'Finance', 'Travel', 'Gaming', 'Entertainment'
+]
+
+# Removed CATEGORY_KEYWORDS dictionary in favor of ML classification
 
 
 class DataProcessor:
@@ -99,7 +75,7 @@ class DataProcessor:
                 if article.content and len(article.content) > 150:
                     try:
                         # Limit input to 1024 chars to avoid token limits
-                        res = summarizer(article.content[:1024], max_length=130, min_length=30, do_sample=False)
+                        res = summarizer(article.content[:1024], max_length=250, min_length=90, do_sample=False)
                         if res and len(res) > 0:
                             article.content = res[0]['summary_text']  # Replace long content with crisp AI summary
                     except Exception as e:
@@ -120,7 +96,7 @@ class DataProcessor:
                 
             db_articles_to_create.append(DBArticle(
                 title=article.title[:500],
-                summary=article.content[:500] + '...' if article.content else 'No summary available.',
+                summary=(article.content[:497] + '...') if article.content and len(article.content) > 500 else article.content or 'No summary available.',
                 content=article.content,
                 category=article.category,
                 url=article.url[:1000],
@@ -139,15 +115,28 @@ class DataProcessor:
         return self._format_output(filtered_articles)
 
     def _categorize_article(self, article: Article) -> str:
-        """Assign a category to an article using keyword matching."""
-        text = (article.title + ' ' + article.content).lower()
-        scores: Dict[str, int] = {}
-        for category, keywords in CATEGORY_KEYWORDS.items():
-            score = sum(1 for kw in keywords if kw in text)
-            if score > 0:
-                scores[category] = score
-        if scores:
-            return max(scores.items(), key=lambda x: x[1])[0]
+        """Assign a category to an article using ML Zero-Shot Classification."""
+        text = f"{article.title}. {article.content}"[:1024]  # Limit to 1024 chars for speed
+        
+        # Check for breaking news urgency first using simple heuristics
+        urgency_keywords = ['breaking', 'urgent', 'alert', 'developing', 'just in', 'flash', 'live']
+        if any(kw in text.lower() for kw in urgency_keywords[:5]):
+            return 'Breaking'
+            
+        classifier = get_classifier()
+        if classifier:
+            try:
+                # Perform zero-shot classification
+                result = classifier(text, candidate_labels=AVAILABLE_CATEGORIES, multi_label=False)
+                best_label = result['labels'][0]
+                best_score = result['scores'][0]
+                
+                # Only use the AI classification if it's reasonably confident
+                if best_score > 0.2:
+                    return best_label
+            except Exception as e:
+                logger.warning(f"Classification failed for {article.title}: {e}")
+                
         return 'Global'  # Default fallback
 
     def _filter_articles(self, articles: List[Article]) -> List[Article]:
