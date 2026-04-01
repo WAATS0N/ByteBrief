@@ -84,3 +84,52 @@ def send_daily_digests():
                 logger.error(f"Failed to send email to {user.email}: {e}")
                 
     logger.info(f"Daily digest emailing process complete. Sent {emails_sent} emails.")
+
+def automated_pipeline_job():
+    """
+    ByteBrief Automated Setup:
+    1. Clean old news (older than 7 days) preserving bookmarks.
+    2. Run scraper logic to fetch, summarize, and deduplicate.
+    """
+    logger.info("🎬 [AUTOMATION] Starting Daily/Hourly News Pipeline...")
+    
+    # 1. Cleanup old news
+    try:
+        cleanup_old_news()
+    except Exception as e:
+        logger.error(f"❌ [AUTOMATION] Failed to cleanup old news: {e}", exc_info=True)
+
+    # 2. Run Scraping & AI Summaries
+    try:
+        run_orchestrator_scraper()
+    except Exception as e:
+        logger.error(f"❌ [AUTOMATION] Failed during scraping/summarization: {e}", exc_info=True)
+
+def cleanup_old_news():
+    logger.info("🧹 [CLEANUP] Deleting articles older than 7 days that are not bookmarked...")
+    seven_days_ago = timezone.now() - timedelta(days=7)
+    
+    from .models import Bookmark
+    
+    old_articles = Article.objects.filter(published_at__lt=seven_days_ago)
+    bookmarked_article_ids = Bookmark.objects.values_list('article_id', flat=True)
+    unbookmarked_old_articles = old_articles.exclude(id__in=bookmarked_article_ids)
+    
+    deleted_count, _ = unbookmarked_old_articles.delete()
+    logger.info(f"✅ [CLEANUP] Successfully deleted {deleted_count} outdated articles.")
+
+def run_orchestrator_scraper():
+    logger.info("🕸️ [SCRAPER] Initializing AgentOrchestrator to fetch fresh data...")
+    from bytebrief.core.models import ClientConfig
+    from bytebrief.agent.orchestrator import AgentOrchestrator
+    import os
+    from django.conf import settings
+    
+    config_dir = os.path.join(settings.BASE_DIR, 'src', 'config')
+    orch = AgentOrchestrator(config_dir=config_dir)
+    config = ClientConfig(name="Automated Background Pull", keywords=[], categories=[], excluded_keywords=[])
+    
+    results = orch.run(config)
+    
+    processed_count = len(results) if results else 0
+    logger.info(f"✅ [SCRAPER] Successfully pulled and summarized {processed_count} new articles.")

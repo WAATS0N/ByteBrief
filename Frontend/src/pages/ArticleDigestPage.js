@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Clock, Share2, BookOpen, CheckCircle, Brain, Bookmark } from 'lucide-react';
+import { ArrowLeft, Clock, Share2, BookOpen, CheckCircle, Brain, Bookmark, Lock } from 'lucide-react';
 import { fetchBookmarks, toggleBookmark } from '../services/api';
 
 const ArticleDigestPage = () => {
@@ -8,6 +8,7 @@ const ArticleDigestPage = () => {
   const navigate = useNavigate();
   const [digestPoints, setDigestPoints] = useState([]);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [showLimitModal, setShowLimitModal] = useState(false);
 
   // Get article from navigation state
   const article = location.state?.article;
@@ -18,6 +19,20 @@ const ArticleDigestPage = () => {
       // In a real app, we would fetch by ID here
       navigate('/');
       return;
+    }
+
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      let clicks = parseInt(sessionStorage.getItem('guest_article_clicks') || '0');
+      clicks += 1;
+      sessionStorage.setItem('guest_article_clicks', clicks.toString());
+      if (clicks > 3) {
+        setShowLimitModal(true);
+      }
+    } else if (article && article.category) {
+      let prefs = JSON.parse(localStorage.getItem("user_category_prefs") || "{}");
+      prefs[article.category] = (prefs[article.category] || 0) + 1;
+      localStorage.setItem("user_category_prefs", JSON.stringify(prefs));
     }
 
     // Heuristic: Transform summary/content into point-by-point digest
@@ -133,13 +148,19 @@ const ArticleDigestPage = () => {
   return (
     <div className="min-h-screen bg-black pt-8 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <Link
-          to="/"
+        <button
+          onClick={() => {
+            if (window.history.state && window.history.state.idx > 0) {
+              navigate(-1);
+            } else {
+              navigate('/home');
+            }
+          }}
           className="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-8 group"
         >
           <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
           Back to Digest
-        </Link>
+        </button>
 
         {/* Transformed Container */}
         <div className="relative bg-gray-900/50 rounded-2xl border border-purple-500/20 overflow-hidden shadow-2xl backdrop-blur-sm">
@@ -187,13 +208,13 @@ const ArticleDigestPage = () => {
             </div>
 
             {/* Digest Content */}
-            <div className="space-y-6">
+            <div className="relative space-y-6">
               <h2 className="text-xl font-semibold text-cyan-400 flex items-center">
                 <CheckCircle className="h-5 w-5 mr-2" />
                 Key Takeaways
               </h2>
 
-              <div className="space-y-4">
+              <div className={`space-y-4 ${showLimitModal ? 'blur-md pointer-events-none select-none opacity-40' : ''}`}>
                 {digestPoints.map((point, index) => (
                   <div key={index} className="flex items-start group">
                     <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-800 text-gray-400 flex items-center justify-center text-sm font-mono mr-4 group-hover:bg-purple-500/20 group-hover:text-purple-400 transition-colors">
@@ -205,6 +226,26 @@ const ArticleDigestPage = () => {
                   </div>
                 ))}
               </div>
+
+              {showLimitModal && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center">
+                  <div className="bg-gray-900 border border-purple-500/50 p-6 sm:p-8 rounded-3xl shadow-2xl max-w-md text-center transform -translate-y-4 animate-fade-in-up">
+                    <div className="bg-purple-500/20 p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                      <Lock className="w-8 h-8 text-purple-400" />
+                    </div>
+                    <h3 className="text-2xl font-extrabold text-white mb-3">Free Limit Reached</h3>
+                    <p className="text-gray-400 mb-8 font-medium leading-relaxed">
+                      You've read 3 AI summaries as an exploring guest. Please create a free account to continue reading, personalize your feed, and save articles.
+                    </p>
+                    <Link
+                      to="/login"
+                      className="w-full inline-block py-4 px-6 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white rounded-xl font-bold shadow-[0_0_30px_-10px_rgba(168,85,247,0.5)] transition-transform hover:scale-105"
+                    >
+                      Log In / Sign Up
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="mt-12 pt-8 border-t border-gray-800">

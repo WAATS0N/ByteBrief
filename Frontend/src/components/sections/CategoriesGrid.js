@@ -19,7 +19,6 @@ const CategoriesGrid = ({ categories }) => {
                 <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
                 <Icon className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400 group-hover:text-purple-400 mb-2 sm:mb-3 mx-auto transition-colors" />
                 <div className="text-white font-semibold text-sm sm:text-lg">{category.name}</div>
-                <div className="text-gray-500 text-xs sm:text-sm">{category.count} updates</div>
               </Link>
             );
           })}

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { fetchMetadata } from '../services/api';
 import { getIcon } from '../utils/iconMap';
+import { ArrowLeft } from 'lucide-react';
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadCategories = async () => {
@@ -27,6 +29,19 @@ const Categories = () => {
     return (
         <div className="min-h-screen bg-black pt-8 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
+                <button
+                    onClick={() => {
+                        if (window.history.state && window.history.state.idx > 0) {
+                            navigate(-1);
+                        } else {
+                            navigate('/home');
+                        }
+                    }}
+                    className="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-6 group"
+                >
+                    <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                    Back
+                </button>
                 <div className="text-center mb-16">
                     <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-4 pb-2">
                         News Categories
@@ -61,9 +76,7 @@ const Categories = () => {
                                             {category.name}
                                         </h3>
 
-                                        <div className="flex flex-col sm:flex-row sm:items-center text-gray-400 text-xs sm:text-sm">
-                                            <span className="font-medium text-purple-400/80 sm:mr-2">{category.count} updates available</span>
-                                        </div>
+
 
                                         <div className="mt-4 sm:mt-8 flex items-center text-[10px] sm:text-sm text-purple-400 font-semibold opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                                             View Digest

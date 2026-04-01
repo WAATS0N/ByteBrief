@@ -44,6 +44,12 @@ export const fetchPreferences = async (token) => {
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
         const response = await fetch(`${API_BASE_URL}/user/preferences/`, { headers });
+        if (response.status === 401) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+            throw new Error('Session expired');
+        }
         if (!response.ok) throw new Error('Failed to fetch preferences');
         return await response.json();
     } catch (error) {
@@ -62,6 +68,12 @@ export const savePreferences = async (token, categories) => {
             headers,
             body: JSON.stringify({ categories })
         });
+        if (response.status === 401) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+            throw new Error('Session expired');
+        }
         if (!response.ok) throw new Error('Failed to save preferences');
         return await response.json();
     } catch (error) {
@@ -76,6 +88,12 @@ export const fetchBookmarks = async (token) => {
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
         const response = await fetch(`${API_BASE_URL}/user/bookmarks/`, { headers });
+        if (response.status === 401) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+            throw new Error('Session expired');
+        }
         if (!response.ok) throw new Error('Failed to fetch bookmarks');
         return await response.json();
     } catch (error) {
@@ -96,6 +114,12 @@ export const toggleBookmark = async (token, articleUrl, isBookmarked) => {
             body: JSON.stringify({ article_url: articleUrl })
         });
         
+        if (response.status === 401) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+            throw new Error('Session expired');
+        }
         if (!response.ok) throw new Error('Failed to toggle bookmark');
         return await response.json();
     } catch (error) {

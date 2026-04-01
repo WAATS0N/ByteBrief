@@ -1,15 +1,30 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     LineChart, Line, Legend, Cell
 } from 'recharts';
-import { Users, Clock, Bookmark, Activity, ArrowUpRight, TrendingUp } from 'lucide-react';
+import { Users, Clock, Bookmark, Activity, ArrowUpRight, TrendingUp, ArrowLeft } from 'lucide-react';
 import { categoryViewsData, engagementData, topArticles, kpiStats } from '../data/mockAnalytics';
 
 const Analytics = () => {
+    const navigate = useNavigate();
     return (
         <div className="min-h-screen bg-black pt-8 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
+                <button
+                    onClick={() => {
+                        if (window.history.state && window.history.state.idx > 0) {
+                            navigate(-1);
+                        } else {
+                            navigate('/home');
+                        }
+                    }}
+                    className="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-6 group"
+                >
+                    <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                    Back
+                </button>
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
                     <div>
                         <div className="flex items-center space-x-3 mb-2">

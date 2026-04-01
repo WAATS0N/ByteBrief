@@ -66,7 +66,7 @@ const Navigation = ({ isMenuOpen, setIsMenuOpen }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <Link to={isAuthenticated ? "/home" : "/"} className="flex items-center space-x-3 relative group">
+            <Link to="/home" className="flex items-center space-x-3 relative group">
               <BrandSeal scale={0.08} />
               <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 ByteBrief

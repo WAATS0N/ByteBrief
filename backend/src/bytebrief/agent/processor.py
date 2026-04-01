@@ -47,7 +47,10 @@ def get_classifier():
 # The categories available in the frontend UI
 AVAILABLE_CATEGORIES = [
     'Tech', 'Business', 'Global', 'Health', 'Sports',
-    'Politics', 'Finance', 'Travel', 'Gaming', 'Entertainment'
+    'Politics', 'Finance', 'Travel', 'Gaming', 'Entertainment',
+    'Breaking', 'Startups & Innovation', 'AI & Future Tech', 
+    'Climate & Environment', 'Cybersecurity', 'Digital Life', 
+    'Space & Research', 'Psychology & Mind', 'Global Affairs', 'Science'
 ]
 
 # Removed CATEGORY_KEYWORDS dictionary in favor of ML classification

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { generateDigest } from '../services/api';
 import FeaturedNews from '../components/sections/FeaturedNews';
 
 const CategoryPage = () => {
     const { categoryName } = useParams();
+    const navigate = useNavigate();
     const [articles, setArticles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -46,10 +47,19 @@ const CategoryPage = () => {
         <div className="min-h-screen bg-black pt-8 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <div className="mb-8">
-                    <Link to="/" className="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-4">
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to Home
-                    </Link>
+                    <button
+                        onClick={() => {
+                            if (window.history.state && window.history.state.idx > 0) {
+                                navigate(-1);
+                            } else {
+                                navigate('/home');
+                            }
+                        }}
+                        className="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-4 group"
+                    >
+                        <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                        Back
+                    </button>
                     <h1 className="text-4xl font-bold text-white capitalize">
                         {categoryName} News
                     </h1>

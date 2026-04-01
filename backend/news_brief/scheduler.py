@@ -13,29 +13,18 @@ logger = logging.getLogger(__name__)
 sys.path.append(str(Path(__file__).resolve().parent.parent / "src"))
 
 
-def scrape_news_job():
-    """Periodic task: scrape all active publishers and save new articles to DB."""
-    logger.info("=== Background news scraping job starting ===")
-    try:
-        from bytebrief.core.models import ClientConfig
-        from bytebrief.agent.orchestrator import AgentOrchestrator
-        orch = AgentOrchestrator()
-        result = orch.run(ClientConfig(name="Background Worker", categories=["global"]))
-        logger.info(f"=== Background scraping done. Processed {len(result) if result else 0} articles ===")
-    except Exception as e:
-        logger.error(f"Background scraping failed: {e}", exc_info=True)
-
+from .tasks import automated_pipeline_job
 
 def start_scheduler():
     """Initialize and start the APScheduler background scheduler."""
     scheduler = BackgroundScheduler(timezone=timezone.get_current_timezone())
     scheduler.add_jobstore(DjangoJobStore(), "default")
 
-    # ── Scrape news every 15 minutes ─────────────────────────────────────────
+    # ── Run Automation Pipeline every 6 hours ─────────────────────────────────
     scheduler.add_job(
-        scrape_news_job,
-        trigger=IntervalTrigger(minutes=15),
-        id="scrape_news_job",
+        automated_pipeline_job,
+        trigger=IntervalTrigger(hours=6),
+        id="automated_pipeline_job",
         max_instances=1,
         replace_existing=True,
     )
@@ -52,4 +41,4 @@ def start_scheduler():
 
     register_events(scheduler)
     scheduler.start()
-    logger.info("APScheduler started — news scraped every 15 min, digest emailed daily at 8 AM.")
+    logger.info("APScheduler started — Pipeline automation runs every 6 hours, digest emailed daily at 8 AM.")
