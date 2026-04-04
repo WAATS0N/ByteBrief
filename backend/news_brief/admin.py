@@ -1,5 +1,15 @@
 from django.contrib import admin
-from .models import Publisher, Article, UserPreference, Bookmark
+from .models import Publisher, Article, UserPreference, Bookmark, SupportTicket
+
+@admin.register(SupportTicket)
+class SupportTicketAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'subject', 'created_at')
+    list_filter = ('created_at',)
+    search_fields = ('user__username', 'user__email', 'subject', 'message')
+    readonly_fields = ('user', 'subject', 'message', 'created_at')
+    date_hierarchy = 'created_at'
+    ordering = ('-created_at',)
+
 
 @admin.register(Publisher)
 class PublisherAdmin(admin.ModelAdmin):

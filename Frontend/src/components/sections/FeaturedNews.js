@@ -32,7 +32,7 @@ const FeaturedNews = ({ featuredArticles }) => {
     }
     const isBookmarked = bookmarks[article.url];
     setBookmarks(prev => ({ ...prev, [article.url]: !isBookmarked }));
-    
+
     const res = await toggleBookmark(token, article.url, isBookmarked);
     if (res.status !== 'success') {
       setBookmarks(prev => ({ ...prev, [article.url]: isBookmarked }));
@@ -57,7 +57,7 @@ const FeaturedNews = ({ featuredArticles }) => {
   };
 
   return (
-    <div className="py-20 bg-black">
+    <div className="py-20 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
           {featuredArticles.map((article) => {
@@ -66,10 +66,10 @@ const FeaturedNews = ({ featuredArticles }) => {
                 <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
 
                 <div className="w-full aspect-video overflow-hidden bg-gray-800">
-                  <ArticleImage 
-                    src={article.image_url} 
-                    category={article.category} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                  <ArticleImage
+                    src={article.image_url}
+                    category={article.category}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
 

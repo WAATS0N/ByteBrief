@@ -113,7 +113,7 @@ export const toggleBookmark = async (token, articleUrl, isBookmarked) => {
             headers,
             body: JSON.stringify({ article_url: articleUrl })
         });
-        
+
         if (response.status === 401) {
             localStorage.removeItem('access_token');
             localStorage.removeItem('user');
@@ -126,4 +126,58 @@ export const toggleBookmark = async (token, articleUrl, isBookmarked) => {
         console.error("Failed to toggle bookmark:", error);
         return { status: 'error' };
     }
+};
+
+export const fetchUserSettings = async (token) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/user/settings/`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Fetch settings failed');
+        return await response.json();
+    } catch (e) { return null; }
+};
+
+export const updateUserSettings = async (token, settings) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/user/settings/`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(settings)
+        });
+        if (!response.ok) throw new Error('Update settings failed');
+        return await response.json();
+    } catch (e) { return null; }
+};
+
+export const fetchReadingHistory = async (token) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/user/history/`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Fetch history failed');
+        return await response.json();
+    } catch (e) { return []; }
+};
+
+export const fetchNotifications = async (token) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/user/notifications/`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Fetch notifications failed');
+        return await response.json();
+    } catch (e) { return []; }
+};
+
+export const submitSupportTicket = async (token, subject, message, type = 'General') => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/support/ticket/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ subject, message, type })
+        });
+        if (!response.ok) throw new Error('Submit ticket failed');
+        return await response.json();
+    } catch (e) { return { status: 'error' }; }
 };

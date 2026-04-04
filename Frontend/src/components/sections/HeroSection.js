@@ -5,10 +5,7 @@ const HeroSection = ({ heroData, animatedText }) => {
   const { title, animatedText: staticAnimatedText, features } = heroData;
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black overflow-hidden">
-      <div className="absolute inset-0 opacity-20">
-        <div className="w-full h-full bg-gradient-to-r from-purple-500/10 to-cyan-500/10"></div>
-      </div>
+    <div className="relative min-h-screen overflow-hidden">
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
         <div className="text-center">

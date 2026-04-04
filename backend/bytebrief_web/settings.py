@@ -230,7 +230,7 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 
 # The email address that users will see as the sender
-DEFAULT_FROM_EMAIL = 'ByteBrief <no-reply@bytebrief.com>'
+DEFAULT_FROM_EMAIL = 'ByteBrief <bytebrief2026@gmail.com>'
 
 # Redirect to frontend after successful login
 LOGIN_URL = 'http://localhost:3000/login'

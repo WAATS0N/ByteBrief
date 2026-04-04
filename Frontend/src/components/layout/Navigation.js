@@ -43,7 +43,7 @@ const Navigation = ({ isMenuOpen, setIsMenuOpen }) => {
 
   if (location.pathname === '/') {
     return (
-      <nav className="w-full relative z-50 bg-black py-8 border-b border-white/30 flex justify-center items-center backdrop-blur-sm">
+      <nav className="w-full relative z-50 bg-transparent py-8 border-b border-white/10 flex justify-center items-center backdrop-blur-sm">
         <Link to="/" className="flex flex-col items-center justify-center transform transition-opacity hover:opacity-80">
           <span className="font-serif text-[32px] sm:text-4xl font-normal tracking-[0.15em] text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
             BYTE BRIEF
@@ -62,7 +62,7 @@ const Navigation = ({ isMenuOpen, setIsMenuOpen }) => {
   }
 
   return (
-    <nav className="sticky top-0 w-full z-50 bg-black border-b border-gray-800">
+    <nav className="sticky top-0 w-full z-50 bg-black/50 backdrop-blur-xl border-b border-gray-800/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
