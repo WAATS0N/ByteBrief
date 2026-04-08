@@ -54,7 +54,8 @@ class DeleteAccountView(APIView):
         user.delete()
         return Response({'message': 'Account deleted successfully.'})
 
-from .models import UserPreference, ReadingHistory, Notification, SupportTicket, Article
+from .models import UserPreference, ReadingHistory, Notification, SupportTicket, Article as DBArticle
+import django.utils.timezone
 
 class UserSettingsView(APIView):
     permission_classes = [IsAuthenticated]
@@ -86,10 +87,13 @@ class ReadingHistoryView(APIView):
         if not article_id:
             return Response({'error': 'no article_id'}, status=400)
         try:
-            article = Article.objects.get(id=article_id)
-            ReadingHistory.objects.update_or_create(user=request.user, article=article)
+            article = DBArticle.objects.get(id=article_id)
+            history_item, created = ReadingHistory.objects.get_or_create(user=request.user, article=article)
+            if not created:
+                history_item.viewed_at = django.utils.timezone.now()
+                history_item.save()
             return Response({'status': 'ok'})
-        except Article.DoesNotExist:
+        except DBArticle.DoesNotExist:
             return Response({'error': 'Article not found'}, status=404)
 
 class NotificationView(APIView):

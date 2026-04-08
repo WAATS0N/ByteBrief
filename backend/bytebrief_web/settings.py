@@ -178,7 +178,7 @@ SIMPLE_JWT = {
 
 # Allauth Config
 SITE_ID = 1
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Required verification
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # Required verification
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True

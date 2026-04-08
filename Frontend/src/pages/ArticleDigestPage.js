@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Clock, Share2, BookOpen, CheckCircle, Brain, Bookmark, Lock } from 'lucide-react';
-import { fetchBookmarks, toggleBookmark } from '../services/api';
+import { fetchBookmarks, toggleBookmark, recordReadingHistory } from '../services/api';
 
 const ArticleDigestPage = () => {
   const location = useLocation();
@@ -33,6 +33,11 @@ const ArticleDigestPage = () => {
       let prefs = JSON.parse(localStorage.getItem("user_category_prefs") || "{}");
       prefs[article.category] = (prefs[article.category] || 0) + 1;
       localStorage.setItem("user_category_prefs", JSON.stringify(prefs));
+
+      // Save reading history to backend if authenticated
+      if (article.id) {
+        recordReadingHistory(token, article.id).catch(console.error);
+      }
     }
 
     // Heuristic: Transform summary/content into point-by-point digest
@@ -42,23 +47,23 @@ const ArticleDigestPage = () => {
     let temp = document.createElement('textarea');
     temp.innerHTML = rawText;
     let decoded = temp.value;
-    
+
     // Now strip standard HTML tags
     let div = document.createElement('div');
     div.innerHTML = decoded;
     let textToProcess = div.textContent || div.innerText || "";
-    
+
     // Clean up trailing ellipses and stray single characters (like "a.")
     textToProcess = textToProcess.replace(/\s+/g, " ");
     textToProcess = textToProcess.replace(/<[^>]+>/g, ""); // Extra safety for broken tags
     textToProcess = textToProcess.replace(/(\s*\.{1,3}\s*)+$/g, "."); // Replace any trailing dots/spaces with a single period
-    
+
     // Split by period, question mark, or exclamation mark followed by a space
     let extracted = textToProcess
       .split(/(?<=[.?!])\s+/)
       .filter(p => p.length > 15 && !p.match(/\b[a-z]{1,2}\.$/i))
       .map(p => p.trim());
-      
+
     // Remove duplicates without changing order
     extracted = [...new Set(extracted)];
 
@@ -68,15 +73,15 @@ const ArticleDigestPage = () => {
     } else {
       // If we don't have enough natural sentences, build contextual takeaways
       const enrichedPoints = [];
-      
+
       // 1. The core fact (Title)
       if (article.title && !extracted[0]?.includes(article.title.slice(0, 20))) {
         enrichedPoints.push(`${article.title}.`);
       }
-      
+
       // 2. The actual summary sentences
       enrichedPoints.push(...extracted);
-      
+
       // 3. Contextual additions to reach 4-5 points
       if (enrichedPoints.length < 4 && article.source) {
         enrichedPoints.push(`According to reports from ${article.source}, this development provides key insights into the ${article.category || 'current'} landscape.`);
@@ -87,7 +92,7 @@ const ArticleDigestPage = () => {
       if (enrichedPoints.length < 5) {
         enrichedPoints.push(`Analysts indicate that further developments are expected as the situation unfolds in the coming days.`);
       }
-      
+
       points = [...new Set(enrichedPoints)].slice(0, 5);
     }
 
@@ -119,7 +124,7 @@ const ArticleDigestPage = () => {
     }
     // Optimistic UI update
     setIsBookmarked(!isBookmarked);
-    
+
     const res = await toggleBookmark(token, article.url, isBookmarked);
     if (res.status !== 'success') {
       setIsBookmarked(isBookmarked); // rollback

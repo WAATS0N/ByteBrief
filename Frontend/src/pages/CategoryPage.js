@@ -19,7 +19,7 @@ const CategoryPage = () => {
 
                 if (data.articles) {
                     const mappedArticles = data.articles.map((article, idx) => ({
-                        id: `cat-${idx}`,
+                        id: article.id || `cat-${idx}`,
                         title: article.title,
                         summary: article.summary || article.content?.slice(0, 150) + "..." || "No summary available.",
                         category: article.category || categoryName,

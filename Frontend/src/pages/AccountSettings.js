@@ -364,7 +364,6 @@ const AccountSettings = () => {
                     </div>
                     <p className="text-gray-400 text-base mb-5">Manage your reading activity and saved articles.</p>
                     <div className="space-y-1">
-                        <SettingsLinkRow icon={Bell} label="Notification Inbox" onClick={openNotifications} />
                         <SettingsLinkRow icon={Clock} label="History" onClick={() => navigate('/history')} />
                         <SettingsLinkRow icon={Bookmark} label="Bookmarks" onClick={() => navigate('/saved')} />
                     </div>
@@ -469,30 +468,7 @@ const AccountSettings = () => {
                 </div>
             )}
 
-            {/* ── Notifications Modal ── */}
-            {showNotifModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
-                    <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 max-w-md w-full relative h-[60vh] flex flex-col">
-                        <button onClick={() => setShowNotifModal(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white"><X className="h-5 w-5" /></button>
-                        <h3 className="text-xl font-bold text-white mb-4 flex items-center"><Bell className="h-5 w-5 mr-2 text-purple-400" /> Notifications</h3>
 
-                        <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-                            {notifications.length > 0 ? notifications.map(n => (
-                                <div key={n.id} className={`p-4 rounded-xl border ${n.is_read ? 'bg-gray-950 border-gray-800' : 'bg-gray-800/50 border-purple-500/30'}`}>
-                                    <h4 className="text-white font-medium mb-1">{n.title}</h4>
-                                    <p className="text-gray-400 text-sm">{n.message}</p>
-                                    <span className="text-gray-600 text-xs mt-2 block">{new Date(n.created_at).toLocaleString()}</span>
-                                </div>
-                            )) : (
-                                <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                                    <Bell className="h-12 w-12 mb-3 opacity-20" />
-                                    <p>You have no new notifications.</p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {/* ── Delete Confirmation Modal ── */}
             {showDeleteModal && (

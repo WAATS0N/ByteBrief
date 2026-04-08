@@ -106,6 +106,7 @@ def generate_digest_api(request):
                 
             for a in filtered_qs:
                 articles.append({
+                    'id': a.id,
                     'title': a.title,
                     'content': a.summary or a.content,
                     'source': a.publisher.name if a.publisher else 'Unknown',

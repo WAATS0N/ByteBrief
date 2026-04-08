@@ -169,7 +169,7 @@ const ByteBriefWebsite = () => {
 
         if (data.articles && data.articles.length > 0) {
           const mappedFeatured = data.articles.slice(0, 8).map((article, idx) => ({
-            id: idx + 100,
+            id: article.id || (idx + 100),
             title: article.title,
             summary: article.summary || article.content?.slice(0, 150) + "..." || "No summary available.",
             category: article.category || "Global",
@@ -184,7 +184,7 @@ const ByteBriefWebsite = () => {
 
           const mappedBreaking = data.articles.map((a, idx) => ({
             title: a.title,
-            id: idx + 200,
+            id: a.id || (idx + 200),
             summary: a.summary || a.content,
             category: a.category || "Breaking",
             source: a.source,

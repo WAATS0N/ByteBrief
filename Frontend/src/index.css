@@ -4,9 +4,9 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #000000;
@@ -15,58 +15,151 @@ body {
 /* Light Mode Global Tailwind Overrides */
 html.light-mode,
 html.light-mode body {
-  background-color: #f9fafb !important;
-  color: #111827 !important;
+  background-color: #fbfcf8 !important;
+  /* Requested warm off-white background */
+  color: #0f172a !important;
 }
 
 .light-mode .bg-black {
-  background-color: #f9fafb !important;
+  background-color: #fbfcf8 !important;
 }
 
-.light-mode .bg-gray-900\/60,
-.light-mode .bg-gray-900,
+/* Fix for opacity variants in header, footer, modals, and carousel */
+.light-mode .bg-black\/20,
+.light-mode .bg-black\/50,
+.light-mode .bg-black\/70,
+.light-mode .bg-black\/95 {
+  background-color: rgba(241, 245, 249, 0.8) !important;
+  /* using F1F5F9 with translucency */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-mode .hover\:bg-black\/80:hover {
+  background-color: rgba(226, 232, 240, 0.9) !important;
+  /* using E2E8F0 */
+}
+
+/* Fix for transparent white borders in header */
+.light-mode .border-white\/10 {
+  border-color: rgba(226, 232, 240, 0.8) !important;
+  /* using E2E8F0 */
+}
+
 .light-mode .bg-gray-950\/50,
 .light-mode .bg-gray-950 {
-  background-color: #ffffff !important;
+  background-color: #e2e8f0 !important;
+  /* deeper structural containers */
+}
+
+/* Wildcard catches for all opacity variants */
+.light-mode [class*="bg-gray-900/"],
+.light-mode .bg-gray-900\/60,
+.light-mode .bg-gray-900 {
+  background-color: rgba(248, 250, 252, 0.8) !important;
+  /* Softer focus areas (slate-50 instead of white) */
+  box-shadow: 0 1px 2px 0 rgba(226, 232, 240, 0.5) !important;
+}
+
+.light-mode [class*="bg-gray-800/"] {
+  background-color: rgba(226, 232, 240, 0.6) !important;
+}
+
+/* Fix Tailwind Deep Gradients on Home Page & Layouts */
+.light-mode .from-gray-900 {
+  --tw-gradient-from: #fbfcf8 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(251, 252, 248, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.light-mode .to-gray-800 {
+  --tw-gradient-to: #e2e8f0 var(--tw-gradient-to-position) !important;
+}
+
+.light-mode .to-black {
+  --tw-gradient-to: #fbfcf8 var(--tw-gradient-to-position) !important;
+}
+
+.light-mode .via-purple-900 {
+  --tw-gradient-via: rgba(248, 250, 252, 0) var(--tw-gradient-via-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to) !important;
+}
+
+.light-mode .from-black\/95 {
+  --tw-gradient-from: rgba(251, 252, 248, 0.95) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(251, 252, 248, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.light-mode .via-black\/40 {
+  --tw-gradient-via: rgba(251, 252, 248, 0.7) var(--tw-gradient-via-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to) !important;
+}
+
+.light-mode .from-purple-900\/30 {
+  --tw-gradient-from: rgba(168, 85, 247, 0.1) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(168, 85, 247, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.light-mode .to-cyan-900\/30 {
+  --tw-gradient-to: rgba(6, 182, 212, 0.1) var(--tw-gradient-to-position) !important;
+}
+
+.light-mode [class*="hover\\:bg-gray-800\\/"]:hover,
+.light-mode [class*="hover:bg-gray-800/"]:hover {
+  background-color: rgba(203, 213, 225, 0.8) !important;
+  /* slate-300 */
 }
 
 .light-mode .border-gray-800,
 .light-mode .border-gray-800\/50,
 .light-mode .border-gray-700 {
-  border-color: #e5e7eb !important;
+  border-color: #e2e8f0 !important;
+  /* Borders */
 }
 
 .light-mode .text-white {
-  color: #111827 !important;
+  color: #0f172a !important;
+}
+
+/* Ensure buttons and titles with gradients keep appropriate text styling */
+.light-mode .bg-gradient-to-r.text-white {
+  color: #ffffff !important;
+}
+
+.light-mode .text-transparent {
+  color: transparent !important;
 }
 
 .light-mode .text-gray-200,
 .light-mode .text-gray-300 {
-  color: #374151 !important;
+  color: #334155 !important;
 }
 
 .light-mode .text-gray-400 {
-  color: #4b5563 !important;
+  color: #64748b !important;
 }
 
 .light-mode .text-gray-500 {
-  color: #6b7280 !important;
+  color: #94a3b8 !important;
 }
 
 .light-mode .hover\:bg-gray-800:hover {
-  background-color: #f3f4f6 !important;
+  background-color: #e2e8f0 !important;
+  transform: translateY(-1px);
+  transition: transform 0.2s ease-in-out;
 }
 
 .light-mode .hover\:border-gray-600:hover {
-  border-color: #d1d5db !important;
+  border-color: #cbd5e1 !important;
 }
 
 .light-mode .bg-gray-800 {
-  background-color: #e5e7eb !important;
+  background-color: #f1f5f9 !important;
 }
 
 .light-mode .bg-gray-700 {
-  background-color: #d1d5db !important;
+  background-color: #e2e8f0 !important;
 }
 
 /* Settings Appearance Slider Styling */
@@ -82,9 +175,9 @@ html.light-mode body {
 }
 
 .light-mode #appearance-slider {
-  background-color: #d1d5db !important;
+  background-color: #e2e8f0 !important;
 }
 
 .light-mode #appearance-slider::-webkit-slider-thumb {
-  border-color: #9ca3af;
+  border-color: #06b6d4;
 }

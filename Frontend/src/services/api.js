@@ -160,6 +160,21 @@ export const fetchReadingHistory = async (token) => {
     } catch (e) { return []; }
 };
 
+export const recordReadingHistory = async (token, articleId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/user/history/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ article_id: articleId })
+        });
+        if (!response.ok) throw new Error('Record history failed');
+        return await response.json();
+    } catch (e) { return { status: 'error' }; }
+};
+
 export const fetchNotifications = async (token) => {
     try {
         const response = await fetch(`${API_BASE_URL}/user/notifications/`, {
@@ -168,6 +183,20 @@ export const fetchNotifications = async (token) => {
         if (!response.ok) throw new Error('Fetch notifications failed');
         return await response.json();
     } catch (e) { return []; }
+};
+
+export const markNotificationRead = async (token, notificationId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/user/notifications/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ notification_id: notificationId })
+        });
+        return await response.json();
+    } catch (e) { return { status: 'error' }; }
 };
 
 export const submitSupportTicket = async (token, subject, message, type = 'General') => {

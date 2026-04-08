@@ -18,7 +18,7 @@ const SearchPage = () => {
                 setIsLoading(false);
                 return;
             }
-            
+
             setIsLoading(true);
             try {
                 // Pass the query as a keyword
@@ -26,7 +26,7 @@ const SearchPage = () => {
 
                 if (data.articles) {
                     const mappedArticles = data.articles.map((article, idx) => ({
-                        id: `search-${idx}`,
+                        id: article.id || `search-${idx}`,
                         title: article.title,
                         summary: article.summary || article.content?.slice(0, 150) + "..." || "No summary available.",
                         category: article.category || "Global",

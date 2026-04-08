@@ -32,3 +32,33 @@ def login_alert(sender, request, user, **kwargs):
             logger.info(f"Login alert email sent to {user.email}")
     except Exception as e:
         logger.error(f"Failed to send login alert email to {user.email}: {e}")
+
+from django.db.models.signals import post_save
+from .models import Article, Notification
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+@receiver(post_save, sender=Article)
+def auto_push_breaking_news_notification(sender, instance, created, **kwargs):
+    """
+    Whenever a new Article is saved into the database, this pipeline kicks in!
+    If we detect it as "Breaking" or highly important news, it broadcasts
+    a notification directly to all ByteBrief users automatically.
+    """
+    if created and instance.category:
+        if instance.category.lower() == 'breaking' or instance.category.lower() == 'urgent':
+            users = User.objects.all()
+            
+            notifications = [
+                Notification(
+                    user=user,
+                    title="🚨 New Breaking News!",
+                    message=f"Just In: {instance.title[:60]}... Open ByteBrief to learn more."
+                )
+                for user in users
+            ]
+            
+            # Efficiently write to Database at scale
+            if notifications:
+                Notification.objects.bulk_create(notifications)
