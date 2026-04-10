@@ -237,3 +237,33 @@ def user_bookmarks_api(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
     return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+
+import threading
+from django.core.management import call_command
+
+@csrf_exempt
+def force_scrape_api(request):
+    """
+    Hidden webhook to manually trigger database import/scrape without needing Render Shell.
+    Just visit: /api/admin/force-scrape/
+    """
+    if request.method == 'GET':
+        def run_scrape():
+            try:
+                print("Starting regional sources import...")
+                call_command('import_regional_sources')
+                print("Starting manual scrape...")
+                call_command('scrape_news')
+                print("Scrape finished successfully!")
+            except Exception as e:
+                print(f"Scrape webhook failed: {str(e)}")
+                
+        # Run in background thread so the HTTP request doesn't timeout
+        thread = threading.Thread(target=run_scrape)
+        thread.start()
+        
+        return JsonResponse({
+            'status': 'success', 
+            'message': 'Scraper has been triggered in the background! Please wait 2-3 minutes, then refresh your site.'
+        })
+    return JsonResponse({'status': 'error', 'message': 'Only GET is supported'}, status=405)

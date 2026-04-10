@@ -8,6 +8,7 @@ from .account_views import (
 urlpatterns = [
     path('api/generate-digest/', views.generate_digest_api, name='generate_digest_api'),
     path('api/metadata/', views.get_metadata, name='get_metadata'),
+    path('api/admin/force-scrape/', views.force_scrape_api, name='force_scrape_api'),
 
     # Account Settings
     path('api/user/profile/', UserProfileView.as_view(), name='user_profile'),
