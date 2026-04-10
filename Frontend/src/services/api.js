@@ -3,7 +3,7 @@ rawUrl = rawUrl.replace(/\/+$/, ''); // Remove trailing slashes
 if (!rawUrl.endsWith('/api')) {
     rawUrl += '/api';
 }
-const API_BASE_URL = rawUrl;
+export const API_BASE_URL = rawUrl;
 
 export const generateDigest = async (keywords = [], categories = [], sources = []) => {
     try {

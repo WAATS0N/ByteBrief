@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8000/api/auth/';
+import { API_BASE_URL } from './api';
 
+const AUTH_URL = `${API_BASE_URL}/auth/`;
 // Configure axios to always send the JWT token if it exists
 axios.interceptors.request.use(
     (config) => {
@@ -18,7 +19,7 @@ export const authService = {
     // Login with email and password
     login: async (email, password) => {
         try {
-            const response = await axios.post(`${API_URL}login/`, { email, password });
+            const response = await axios.post(`${AUTH_URL}login/`, { email, password });
             if (response.data && response.data.access) {
                 localStorage.setItem('access_token', response.data.access);
                 localStorage.setItem('refresh_token', response.data.refresh);
@@ -34,7 +35,7 @@ export const authService = {
     register: async (email, password, fullName) => {
         try {
             // dj-rest-auth registration endpoint requires password1, password2, and username
-            const response = await axios.post(`${API_URL}registration/`, {
+            const response = await axios.post(`${AUTH_URL}registration/`, {
                 email,
                 password1: password,
                 password2: password,
@@ -57,7 +58,7 @@ export const authService = {
     // Google OAuth Login
     googleLogin: async (accessToken) => {
         try {
-            const response = await axios.post(`${API_URL}google/`, { access_token: accessToken });
+            const response = await axios.post(`${AUTH_URL}google/`, { access_token: accessToken });
             if (response.data && response.data.access) {
                 localStorage.setItem('access_token', response.data.access);
                 localStorage.setItem('refresh_token', response.data.refresh);
@@ -72,7 +73,7 @@ export const authService = {
     // Reset password
     resetPassword: async (email) => {
         try {
-            const response = await axios.post(`${API_URL}password/reset/`, { email });
+            const response = await axios.post(`${AUTH_URL}password/reset/`, { email });
             return response.data;
         } catch (error) {
             throw error.response?.data || { error: 'Password reset request failed' };
@@ -100,7 +101,7 @@ export const authService = {
     // Get full profile from backend
     getProfile: async () => {
         try {
-            const response = await axios.get('http://127.0.0.1:8000/api/user/profile/');
+            const response = await axios.get(`${API_BASE_URL}/user/profile/`);
             return response.data;
         } catch (error) {
             throw error.response?.data || { error: 'Failed to fetch profile' };
@@ -110,7 +111,7 @@ export const authService = {
     // Update profile (first_name, last_name)
     updateProfile: async (data) => {
         try {
-            const response = await axios.patch('http://127.0.0.1:8000/api/user/profile/', data);
+            const response = await axios.patch(`${API_BASE_URL}/user/profile/`, data);
             // Update local storage with new user info
             const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
             const updatedUser = { ...currentUser, ...response.data };
@@ -124,7 +125,7 @@ export const authService = {
     // Change password
     changePassword: async (oldPassword, newPassword1, newPassword2) => {
         try {
-            const response = await axios.post(`${API_URL}password/change/`, {
+            const response = await axios.post(`${AUTH_URL}password/change/`, {
                 old_password: oldPassword,
                 new_password1: newPassword1,
                 new_password2: newPassword2,
@@ -138,7 +139,7 @@ export const authService = {
     // Delete account (requires password confirmation)
     deleteAccount: async (password) => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/user/delete-account/', { password });
+            const response = await axios.post(`${API_BASE_URL}/user/delete-account/`, { password });
             return response.data;
         } catch (error) {
             throw error.response?.data || { error: 'Account deletion failed' };
