@@ -210,6 +210,8 @@ SOCIALACCOUNT_LOGIN_ON_GET = True   # Bypass the intermediate confirm page
 # Handle email confirmation via Django, then redirect cleanly to React
 FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000').rstrip('/')
 
+CSRF_TRUSTED_ORIGINS = [FRONTEND_URL]
+
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_SUBJECT_PREFIX = '' # Removes [127.0.0.1:8000] from subject
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = f"{FRONTEND_URL}/login"

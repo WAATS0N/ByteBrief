@@ -9,3 +9,6 @@ pip install -e .
 
 echo "Collecting static files for WhiteNoise..."
 python manage.py collectstatic --no-input
+
+echo "Running Database Migrations..."
+python manage.py migrate

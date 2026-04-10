@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ByteBrief Final Presentation</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/dracula.min.css">
+    
+    <style>
+        .reveal h1, .reveal h2, .reveal h3 {
+            color: #50fa7b;
+            text-transform: none;
+        }
+        .reveal h1 { font-size: 2.5em; }
+        .highlight { color: #ff79c6; font-weight: bold; }
+        .reveal li { margin-bottom: 0.5em; font-size: 0.9em; }
+        .reveal p { font-size: 0.9em; line-height: 1.4; }
+        .footer-note { font-size: 0.5em; opacity: 0.6; position: absolute; bottom: 0; left: 0; width: 100%; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section>
+                <h1>ByteBrief</h1>
+                <h3>Intelligent News Aggregation Platform</h3>
+                <p>Final Project Presentation</p>
+                <div style="margin-top: 50px;">
+                    <p style="font-size: 0.7em;">Prepared for Project Evaluation</p>
+                </div>
+            </section>
+
+            <!-- Motivation -->
+            <section>
+                <h2>The Information Overload Problem</h2>
+                <ul>
+                    <li>In the digital age, users are overwhelmed by <span class="highlight">scattered news sources</span>.</li>
+                    <li>Endless scrolling and irrelevant articles increase cognitive load.</li>
+                    <li><span class="highlight">Solution:</span> ByteBrief – a system designed to categorize, summarize, and deliver personalized news digests efficiently.</li>
+                </ul>
+            </section>
+
+            <!-- Objectives & Academic Alignment -->
+            <section>
+                <h2>Objectives & Outcomes</h2>
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex: 1; text-align: left; padding: 20px; border-right: 1px solid #444;">
+                        <h4 style="color: #8be9fd;">Project Goals</h4>
+                        <ul>
+                            <li>Deliver tailored, concise news.</li>
+                            <li>Provide an intuitive UI with Light/Dark modes.</li>
+                            <li>Ensure secure data storage.</li>
+                        </ul>
+                    </div>
+                    <div style="flex: 1; text-align: left; padding: 20px;">
+                        <h4 style="color: #8be9fd;">Course Outcomes</h4>
+                        <ul>
+                            <li>Formulating engineering solutions.</li>
+                            <li>Iterative, modern software design.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tech Stack -->
+            <section>
+                <h2>Technology Stack</h2>
+                <ul>
+                    <li><span class="highlight">Frontend:</span> React.js, Custom Vanilla CSS, React Router for seamless SPA navigation.</li>
+                    <li><span class="highlight">Backend:</span> Python, Django REST Framework for secure API endpoints.</li>
+                    <li><span class="highlight">Data:</span> SQLite / PostgreSQL for managing user profiles, preferences, and reading history.</li>
+                </ul>
+            </section>
+
+            <!-- Architecture -->
+            <section>
+                <h2>System Architecture</h2>
+                <p>A decoupled approach ensuring scalability and fast load times.</p>
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; font-family: monospace; font-size: 0.8em; margin-top: 20px;">
+                    [ React Client UI ] <br>
+                    &uarr; &darr; (JSON / REST API) <br>
+                    [ Django Backend ] <br>
+                    &uarr; &darr; (ORM) <br>
+                    [ SQL Database ]
+                </div>
+            </section>
+
+            <!-- Core Features -->
+            <section>
+                <section>
+                    <h2>Key Features: Delivering the News</h2>
+                    <ul>
+                        <li><span class="highlight">Dynamic News Carousels:</span> Visually engaging article presentations.</li>
+                        <li><span class="highlight">Categorized Digests:</span> Split by topics (Technology, Business, Sports).</li>
+                        <li><span class="highlight">Automated Recommendations:</span> Delivering relevant content based on user selections.</li>
+                    </ul>
+                    <p style="font-size: 0.6em; opacity: 0.7;">(Press Down Arrow to see more features)</p>
+                </section>
+                
+                <section>
+                    <h2>Key Features: Personalization</h2>
+                    <ul>
+                        <li><span class="highlight">Account Settings:</span> Tracking reading history, font sizes, and UI themes.</li>
+                        <li><span class="highlight">Aesthetic Polish:</span> Refined CSS architecture, featuring our newly integrated perfect <span style="color: #f1fa8c">Light Mode</span>.</li>
+                        <li><span class="highlight">FAQ & Support:</span> Interactive keyword-searchable FAQ page and email routing.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Methodology -->
+            <section>
+                <h2>Iterative Methodology</h2>
+                <ul>
+                    <li>Followed <span class="highlight">Agile</span> principles for continuous improvement from V1 to V2.</li>
+                    <li>Transitioned fragmented features to global component architecture.</li>
+                    <li>Continuous UI polish ensuring a premium, app-like experience rather than a basic MVP.</li>
+                </ul>
+            </section>
+
+            <!-- Expansion / Real-Time Plans -->
+            <section>
+                <h2>Future Enhancements (V3.0)</h2>
+                <ul>
+                    <li><span class="highlight">Real-Time WebSocket Notifications:</span> Global bell-icon alerts pushing breaking news.</li>
+                    <li><span class="highlight">Advanced Analytics:</span> Deeper insights into user read-time and drop-offs.</li>
+                    <li><span class="highlight">Mobile Optimization:</span> Creating PWA or Native mobile equivalents.</li>
+                </ul>
+            </section>
+
+            <!-- Societal Impact -->
+            <section>
+                <h2>Societal Impact</h2>
+                <p>By streamlining information and filtering the noise, ByteBrief helps professionals and students save time. The ad-free, clean environment promotes <span class="highlight">digital well-being</span> and mitigates doom-scrolling, directly addressing the social context of modern software.</p>
+            </section>
+
+            <!-- Conclusion -->
+            <section>
+                <h2>Conclusion</h2>
+                <ul>
+                    <li>Successfully built a full-stack, responsive platform.</li>
+                    <li>Overcame challenges in UI/UX synchronization and backend API structuring.</li>
+                    <li>A robust foundation ready for real-time scaling.</li>
+                </ul>
+                <h4 style="color: #ffb86c; margin-top: 30px;">Thank You!</h4>
+                <p style="font-size: 0.6em;">Any questions?</p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            controls: true,
+            progress: true,
+            center: true,
+        });
+    </script>
+</body>
+</html>
