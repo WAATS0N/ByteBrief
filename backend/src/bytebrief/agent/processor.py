@@ -13,6 +13,11 @@ from loguru import logger
 _summarizer = None
 
 def get_summarizer():
+    import os
+    if os.environ.get('RENDER'):
+        logger.warning("Bypassing ML Summarizer on Render Free Tier to prevent 512MB RAM limit OOM crash.")
+        return None
+        
     global _summarizer
     if _summarizer is None:
         try:
@@ -30,6 +35,11 @@ def get_summarizer():
 _classifier = None
 
 def get_classifier():
+    import os
+    if os.environ.get('RENDER'):
+        logger.warning("Bypassing ML Classifier on Render Free Tier to prevent 512MB RAM limit OOM crash.")
+        return None
+
     global _classifier
     if _classifier is None:
         try:
