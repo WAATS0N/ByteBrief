@@ -1,4 +1,9 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api';
+let rawUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api';
+rawUrl = rawUrl.replace(/\/+$/, ''); // Remove trailing slashes
+if (!rawUrl.endsWith('/api')) {
+    rawUrl += '/api';
+}
+const API_BASE_URL = rawUrl;
 
 export const generateDigest = async (keywords = [], categories = [], sources = []) => {
     try {
