@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
+
 load_dotenv()  # Load .env file from the backend directory
 
 
@@ -24,16 +26,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-x$o#7xn@2%^0^=xw+cq32yp64ogs#es!-c$o5_0@t$5fvmfecl'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-x$o#7xn@2%^0^=xw+cq32yp64ogs#es!-c$o5_0@t$5fvmfecl')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     "localhost",
     "10.158.95.192",
     "127.0.0.1"
 ]
+
+# Add Render URL or other custom domain to ALLOWED_HOSTS if available
+if 'RENDER_EXTERNAL_HOSTNAME' in os.environ:
+    ALLOWED_HOSTS.append(os.environ['RENDER_EXTERNAL_HOSTNAME'])
 
 
 # Application definition
@@ -68,6 +74,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -103,10 +110,11 @@ WSGI_APPLICATION = 'bytebrief_web.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
@@ -146,9 +154,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR.parent / 'frontend/build/static',
-]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+frontend_static = BASE_DIR.parent / 'frontend/build/static'
+STATICFILES_DIRS = []
+if frontend_static.exists():
+    STATICFILES_DIRS.append(frontend_static)
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
@@ -197,10 +208,12 @@ ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']  # Modern allauth
 SOCIALACCOUNT_LOGIN_ON_GET = True   # Bypass the intermediate confirm page
 
 # Handle email confirmation via Django, then redirect cleanly to React
+FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000').rstrip('/')
+
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_SUBJECT_PREFIX = '' # Removes [127.0.0.1:8000] from subject
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'http://localhost:3000/login'
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'http://localhost:3000/'
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = f"{FRONTEND_URL}/login"
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = f"{FRONTEND_URL}/"
 
 # Google OAuth2 settings
 # Store these in environment variables for production!
@@ -233,6 +246,6 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = 'ByteBrief <bytebrief2026@gmail.com>'
 
 # Redirect to frontend after successful login
-LOGIN_URL = 'http://localhost:3000/login'
-LOGIN_REDIRECT_URL = 'http://localhost:3000/'
-LOGOUT_REDIRECT_URL = 'http://localhost:3000/'
+LOGIN_URL = f"{FRONTEND_URL}/login"
+LOGIN_REDIRECT_URL = f"{FRONTEND_URL}/"
+LOGOUT_REDIRECT_URL = f"{FRONTEND_URL}/"
