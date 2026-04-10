@@ -22,6 +22,4 @@ urlpatterns = [
     # Allauth (handles Google OAuth redirect flow at /accounts/google/login/)
     path('accounts/', include('allauth.urls')),
     
-    # Frontend SPA catch-all (must be last)
-    re_path(r'^(?!accounts/).*$', TemplateView.as_view(template_name='index.html')),
 ]
