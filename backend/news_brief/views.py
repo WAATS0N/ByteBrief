@@ -269,3 +269,24 @@ def force_scrape_api(request):
             'message': 'Scraper has been triggered in the background! Please wait 2-3 minutes, then refresh your site.'
         })
     return JsonResponse({'status': 'error', 'message': 'Only GET is supported'}, status=405)
+
+from django.contrib.auth import get_user_model
+
+@csrf_exempt
+def clear_users_api(request):
+    """
+    Hidden webhook to manually remove all non-superuser accounts from the database.
+    Just visit: /api/admin/clear-users/
+    """
+    if request.method == 'GET':
+        try:
+            User = get_user_model()
+            # Delete everyone except superusers
+            count, _ = User.objects.filter(is_superuser=False).delete()
+            return JsonResponse({
+                'status': 'success',
+                'message': f'Successfully wiped {count} user accounts from the database.'
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    return JsonResponse({'status': 'error', 'message': 'Only GET is supported'}, status=405)
