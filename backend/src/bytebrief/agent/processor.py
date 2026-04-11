@@ -128,12 +128,12 @@ class DataProcessor:
         return self._format_output(filtered_articles)
 
     def _categorize_article(self, article: Article) -> str:
-        """Assign a category to an article using ML Zero-Shot Classification."""
-        text = f"{article.title}. {article.content}"[:1024]  # Limit to 1024 chars for speed
+        """Assign a category to an article using ML Zero-Shot Classification or Keywrods."""
+        text = f"{article.title}. {article.content}"[:1024].lower()
         
         # Check for breaking news urgency first using simple heuristics
         urgency_keywords = ['breaking', 'urgent', 'alert', 'developing', 'just in', 'flash', 'live']
-        if any(kw in text.lower() for kw in urgency_keywords[:5]):
+        if any(kw in text for kw in urgency_keywords[:5]):
             return 'Breaking'
             
         classifier = get_classifier()
@@ -150,7 +150,35 @@ class DataProcessor:
             except Exception as e:
                 logger.warning(f"Classification failed for {article.title}: {e}")
                 
-        return 'Global'  # Default fallback
+        # FAST KEYWORD FALLBACK (For environments where ML Classifier is disabled due to RAM limits)
+        category_keywords = {
+            'Tech': ['apple', 'google', 'microsoft', 'software', 'hardware', 'app', 'update', 'smartphone'],
+            'Business': ['market', 'stock', 'shares', 'company', 'profit', 'revenue', 'ceo', 'economy'],
+            'Global': ['world', 'international', 'diplomacy', 'nations', 'treaty'],
+            'Health': ['covid', 'disease', 'doctor', 'hospital', 'treatment', 'virus', 'study', 'health'],
+            'Sports': ['football', 'basketball', 'soccer', 'sports', 'game', 'tournament', 'player'],
+            'Politics': ['election', 'president', 'government', 'senate', 'parliament', 'law', 'policy'],
+            'Finance': ['bank', 'inflation', 'currency', 'investor', 'financial', 'bond', 'crypto'],
+            'Travel': ['flight', 'airlines', 'hotel', 'tourism', 'destination', 'vacation'],
+            'Gaming': ['nintendo', 'playstation', 'xbox', 'game', 'steam', 'esports', 'twitch'],
+            'Startups & Innovation': ['startup', 'founder', 'funding', 'seed round', 'venture capital'],
+            'AI & Future Tech': ['ai', 'artificial intelligence', 'openai', 'chatgpt', 'neural network', 'robotics'],
+            'Climate & Environment': ['climate change', 'warming', 'pollution', 'emissions', 'green', 'renewable'],
+            'Cybersecurity': ['hacker', 'breach', 'ransomware', 'cyber', 'security', 'vulnerability', 'password'],
+            'Space & Research': ['nasa', 'space', 'orbit', 'astronaut', 'mission', 'mars', 'satellite', 'spacex'],
+            'Entertainment': ['movie', 'album', 'celebrity', 'hollywood', 'netflix', 'actor', 'cinema'],
+            'Science': ['researcher', 'discovery', 'species', 'fossil', 'science', 'scientist']
+        }
+        
+        best_match = 'Global'
+        max_hits = 0
+        for category, keywords in category_keywords.items():
+            hits = sum(1 for kw in keywords if kw in text)
+            if hits > max_hits:
+                max_hits = hits
+                best_match = category
+                
+        return best_match
 
     def _filter_articles(self, articles: List[Article]) -> List[Article]:
         """Filter articles based on keywords and exclusions"""
