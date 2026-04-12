@@ -91,7 +91,15 @@ ROOT_URLCONF = 'bytebrief_web.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR.parent / 'frontend/build', BASE_DIR / 'templates'],
+        # Check both 'Frontend/build' (dev) and 'frontend/build' (Render auto-lowercase) paths
+        'DIRS': [
+            d for d in [
+                BASE_DIR.parent / 'Frontend' / 'build',   # Local dev (Windows, exact case)
+                BASE_DIR.parent / 'frontend' / 'build',   # Render / Linux (lowercase)
+                BASE_DIR / 'templates',                    # Django app templates
+            ]
+            if d.exists()
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -156,12 +164,33 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-frontend_static = BASE_DIR.parent / 'frontend/build/static'
+# Support both 'Frontend' (Windows dev) and 'frontend' (Linux/Render)
 STATICFILES_DIRS = []
-if frontend_static.exists():
-    STATICFILES_DIRS.append(frontend_static)
+for _static_path in [
+    BASE_DIR.parent / 'Frontend' / 'build' / 'static',
+    BASE_DIR.parent / 'frontend' / 'build' / 'static',
+]:
+    if _static_path.exists():
+        STATICFILES_DIRS.append(_static_path)
+        break  # Use only the first one that exists
 
-CORS_ALLOW_ALL_ORIGINS = True
+
+# ── Frontend URL (must be defined before CORS and CSRF blocks) ────────────
+FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000').rstrip('/')
+
+# ── CORS Configuration ─────────────────────────────────────────────────────
+# In production, restrict to the Render domain and localhost for local dev.
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOWED_ORIGINS = [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+    ]
+    if 'RENDER_EXTERNAL_HOSTNAME' in os.environ:
+        CORS_ALLOWED_ORIGINS.append(f"https://{os.environ['RENDER_EXTERNAL_HOSTNAME']}")
+    if FRONTEND_URL and FRONTEND_URL not in CORS_ALLOWED_ORIGINS:
+        CORS_ALLOWED_ORIGINS.append(FRONTEND_URL)
 CORS_ALLOW_CREDENTIALS = True
 
 # --- Authentication Configuration ---
@@ -207,10 +236,19 @@ ACCOUNT_LOGIN_METHODS = {'email'}     # Modern allauth setting
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']  # Modern allauth setting
 SOCIALACCOUNT_LOGIN_ON_GET = True   # Bypass the intermediate confirm page
 
-# Handle email confirmation via Django, then redirect cleanly to React
-FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000').rstrip('/')
 
-CSRF_TRUSTED_ORIGINS = [FRONTEND_URL]
+# ── CSRF Trusted Origins ────────────────────────────────────────────────────
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    FRONTEND_URL,
+]
+if 'RENDER_EXTERNAL_HOSTNAME' in os.environ:
+    RENDER_HOST = os.environ['RENDER_EXTERNAL_HOSTNAME']
+    CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_HOST}")
+# Remove duplicates
+CSRF_TRUSTED_ORIGINS = list(set(CSRF_TRUSTED_ORIGINS))
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_SUBJECT_PREFIX = '' # Removes [127.0.0.1:8000] from subject

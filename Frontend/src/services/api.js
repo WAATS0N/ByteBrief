@@ -1,9 +1,13 @@
-let rawUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api';
+// Use REACT_APP_API_URL if explicitly set (e.g. for local dev pointing at a separate API server).
+// Otherwise fall back to a relative path so the frontend always calls the same host — this
+// works perfectly on Render where Django serves the React build.
+let rawUrl = process.env.REACT_APP_API_URL || '';
 rawUrl = rawUrl.replace(/\/+$/, ''); // Remove trailing slashes
-if (!rawUrl.endsWith('/api')) {
+if (rawUrl && !rawUrl.endsWith('/api')) {
     rawUrl += '/api';
 }
-export const API_BASE_URL = rawUrl;
+// If no env var, use relative /api — works both locally (via proxy) and on Render
+export const API_BASE_URL = rawUrl || '/api';
 
 export const generateDigest = async (keywords = [], categories = [], sources = []) => {
     try {
