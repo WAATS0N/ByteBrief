@@ -8,8 +8,12 @@ from news_brief import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # News Brief API
-    path('', include('news_brief.urls')),
+    
+    # Health Check
+    path('ping/', views.ping, name='ping'),
+
+    # News Brief API (now prefixed at the root for clarity)
+    path('api/', include('news_brief.urls')),
 
     # Auth API (JWT)
     path('api/auth/', include('dj_rest_auth.urls')),
@@ -23,9 +27,10 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
 
     # ── React Router Catch-All ──────────────────────────────────────────────────
-    # Serve index.html for all non-API, non-admin, non-static routes so that
-    # React Router can handle client-side navigation (direct links, refresh, etc.)
-    re_path(r'^(?!api/|admin/|accounts/|static/).*$',
-            TemplateView.as_view(template_name='index.html'),
+    # Using a custom view (serve_react) instead of TemplateView for better
+    # robustness and diagnostic logging in production.
+    re_path(r'^(?!api/|admin/|accounts/|static/|ping/).*$',
+            views.serve_react,
             name='react_router_catchall'),
 ]
+

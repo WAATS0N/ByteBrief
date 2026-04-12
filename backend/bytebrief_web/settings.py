@@ -91,14 +91,11 @@ ROOT_URLCONF = 'bytebrief_web.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # Check both 'Frontend/build' (dev) and 'frontend/build' (Render auto-lowercase) paths
         'DIRS': [
-            d for d in [
-                BASE_DIR.parent / 'Frontend' / 'build',   # Local dev (Windows, exact case)
-                BASE_DIR.parent / 'frontend' / 'build',   # Render / Linux (lowercase)
-                BASE_DIR / 'templates',                    # Django app templates
-            ]
-            if d.exists()
+            # Be ultra-specific with absolute paths for Render stability
+            os.path.join(BASE_DIR.parent, 'Frontend', 'build'),
+            os.path.join(BASE_DIR.parent, 'frontend', 'build'),
+            os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -110,6 +107,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'bytebrief_web.wsgi.application'
 
@@ -165,14 +163,13 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Support both 'Frontend' (Windows dev) and 'frontend' (Linux/Render)
-STATICFILES_DIRS = []
-for _static_path in [
-    BASE_DIR.parent / 'Frontend' / 'build' / 'static',
-    BASE_DIR.parent / 'frontend' / 'build' / 'static',
-]:
-    if _static_path.exists():
-        STATICFILES_DIRS.append(_static_path)
-        break  # Use only the first one that exists
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR.parent, 'Frontend', 'build', 'static'),
+    os.path.join(BASE_DIR.parent, 'frontend', 'build', 'static'),
+]
+# Clean non-existent paths to avoid Django warnings/errors
+STATICFILES_DIRS = [p for p in STATICFILES_DIRS if os.path.exists(p)]
+
 
 
 # ── Frontend URL (must be defined before CORS and CSRF blocks) ────────────

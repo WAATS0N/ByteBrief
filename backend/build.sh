@@ -31,4 +31,15 @@ site.save()
 print(f'Site configured: {site.domain}')
 "
 
+# ── Step 5: Diagnostics ─────────────────────────────────────────────────────
+echo "🔍 Running build-time diagnostics..."
+echo "Current directory: $(pwd)"
+echo "Listing parent directory:"
+ls -F ..
+echo "Listing Frontend directory (if exists):"
+ls -F ../Frontend || echo "Frontend not found"
+echo "Listing Frontend/build directory (if exists):"
+ls -F ../Frontend/build || echo "Frontend/build not found"
+
 echo "🚀 ByteBrief build complete! Deploying..."
+

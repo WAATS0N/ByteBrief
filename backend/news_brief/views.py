@@ -11,8 +11,44 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 
 import os
+import logging
+from django.conf import settings
+from django.http import HttpResponse, FileResponse
 
-class GoogleLoginView(SocialLoginView):
+logger = logging.getLogger(__name__)
+
+def ping(request):
+    """Health check endpoint"""
+    return JsonResponse({"status": "alive", "message": "ByteBrief Backend is operational"})
+
+def serve_react(request, path=''):
+    """
+    Custom catch-all view to serve React's index.html from any of the configured 
+    Frontend build directories. This is more robust than TemplateView for 
+    high-traffic production apps.
+    """
+    # Prefer relative to BASE_DIR if settings.TEMPLATES is configured correctly
+    for template_dir in settings.TEMPLATES[0]['DIRS']:
+        index_path = Path(template_dir) / 'index.html'
+        if index_path.exists():
+            return FileResponse(open(index_path, 'rb'))
+    
+    # Fallback to direct path checks if TEMPLATES is empty or failing
+    paths_to_check = [
+        settings.BASE_DIR.parent / 'Frontend' / 'build' / 'index.html',
+        settings.BASE_DIR.parent / 'frontend' / 'build' / 'index.html',
+    ]
+    
+    for p in paths_to_check:
+        if p.exists():
+            return FileResponse(open(p, 'rb'))
+            
+    logger.error(f"FAIL: React index.html not found! Checked: {[str(p) for p in paths_to_check]}")
+    return HttpResponse(
+        "<h1>ByteBrief: Frontend Build Missing</h1><p>The application is running but the React build artifacts were not found. Check deployment logs.</p>", 
+        status=404
+    )
+
     adapter_class = GoogleOAuth2Adapter
     callback_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
     client_class = OAuth2Client
