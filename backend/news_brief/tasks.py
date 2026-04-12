@@ -125,8 +125,9 @@ def run_orchestrator_scraper():
     import os
     from django.conf import settings
     
-    config_dir = os.path.join(settings.BASE_DIR, 'src', 'config')
+    config_dir = os.path.join(settings.BASE_DIR, 'config')
     orch = AgentOrchestrator(config_dir=config_dir)
+
     config = ClientConfig(name="Automated Background Pull", keywords=[], categories=[], excluded_keywords=[])
     
     results = orch.run(config)

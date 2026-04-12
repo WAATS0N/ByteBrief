@@ -29,7 +29,11 @@ site.domain = '${RENDER_HOST}'
 site.name = 'ByteBrief'
 site.save()
 print(f'Site configured: {site.domain}')
+
+from news_brief.models import Article
+print(f'Database Article count: {Article.objects.count()}')
 "
+
 
 # ── Step 5: Diagnostics ─────────────────────────────────────────────────────
 echo "🔍 Running build-time diagnostics..."

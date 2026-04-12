@@ -19,6 +19,6 @@ urlpatterns = [
     path('user/bookmarks/', views.user_bookmarks_api, name='user_bookmarks'),
     path('user/history/', ReadingHistoryView.as_view(), name='user_history'),
     path('user/notifications/', NotificationView.as_view(), name='user_notifications'),
-    path('api/support/ticket/', SupportTicketView.as_view(), name='support_ticket'), # kept api/ prefix for consistency with existing calls if any
+    path('support/ticket/', SupportTicketView.as_view(), name='support_ticket'),
 ]
 
