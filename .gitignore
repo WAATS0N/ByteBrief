@@ -107,8 +107,10 @@ Thumbs.db
 
 # Frontend
 node_modules/
-frontend/build/
+# NOTE: Frontend/build IS committed to git so Render can deploy it without Node.js
+# frontend/build/
 frontend/dist/
+
 .npm
 .eslintcache
 
